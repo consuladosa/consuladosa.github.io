@@ -1,0 +1,15 @@
+{
+ "name": "Consulado Gremista de Serra Alta",
+ "short_name": "Consulado SA",
+ "start_url": "./",
+ "display": "standalone",
+ "background_color": "#EEF3F7",
+ "theme_color": "#000000",
+ "icons": [
+  {
+   "src": "icone.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  }
+ ]
+}
