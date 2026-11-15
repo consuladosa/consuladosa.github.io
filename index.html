@@ -412,16 +412,21 @@ function ligarForm(j,i){
 }
 
 /* ===== anuidade ===== */
+/* data de nascimento digitada: 19121994 vira 19/12/1994 */
+function mascaraData(el){el.addEventListener('input',function(){var d=el.value.replace(/\D/g,'').slice(0,8),o=d.slice(0,2);if(d.length>2)o+='/'+d.slice(2,4);if(d.length>4)o+='/'+d.slice(4);el.value=o})}
+function dataNasc(v){var m=String(v||'').match(/^(\d{2})\/(\d{2})\/(\d{4})$/);if(!m)return '';var d=+m[1],mm=+m[2],a=+m[3],t=new Date(a,mm-1,d);
+  if(t.getFullYear()!==a||t.getMonth()!==mm-1||t.getDate()!==d||a<1900||t>new Date())return '';return m[1]+'/'+m[2]+'/'+m[3]}
 function telaAnuidade(m){
   $('#anu').innerHTML='<div class="bloco"><p class="suave" style="margin-top:0">Consulte anuidades, inscrição do Palpitaço e eventos com CPF e data de nascimento.</p>'+(m?erro(m):'')+
   '<form id="an-form" action="#" method="post" autocomplete="on">'+
   '<label for="an-cpf">CPF</label><input id="an-cpf" name="username" type="text" inputmode="numeric" autocomplete="username" placeholder="000.000.000-00">'+
-  '<label for="an-nasc">Data de nascimento</label><input id="an-nasc" name="bday" type="date" autocomplete="bday">'+
+  '<label for="an-nasc">Data de nascimento</label><input id="an-nasc" name="bday" type="text" inputmode="numeric" autocomplete="bday" placeholder="dd/mm/aaaa" maxlength="10">'+
   caixaManter('an-man')+'<p><button class="btn larg" id="an-ok" type="submit">Consultar</button></p></form><div id="an-msg"></div></div>';
-  mascaraCpf($('#an-cpf'));
+  mascaraCpf($('#an-cpf'));mascaraData($('#an-nasc'));
   $('#an-form').onsubmit=function(ev){ev.preventDefault();var b=$('#an-ok');b.disabled=true;$('#an-msg').innerHTML='';
     var man=$('#an-man').checked;
-    run('loginAnuidade',$('#an-cpf').value,$('#an-nasc').value,man).then(function(r){TK_A=r.token;if(man)Mem.set('cs_tk_a',r.token);else Mem.del('cs_tk_a');mostraAnuidade(r)}).catch(function(e){$('#an-msg').innerHTML=erro(e);b.disabled=false})};
+    var dn=dataNasc($('#an-nasc').value);if(!dn){$('#an-msg').innerHTML=erro('Data inválida. Digite dia, mês e ano, ex.: 19121994.');b.disabled=false;return}
+    run('loginAnuidade',$('#an-cpf').value,dn,man).then(function(r){TK_A=r.token;if(man)Mem.set('cs_tk_a',r.token);else Mem.del('cs_tk_a');mostraAnuidade(r)}).catch(function(e){$('#an-msg').innerHTML=erro(e);b.disabled=false})};
 }
 function mostraAnuidade(r){
   var emDia=r.aberto<0.01;
