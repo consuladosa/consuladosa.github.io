@@ -9,8 +9,17 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Consulado SA">
-<link rel="apple-touch-icon" href="icone.png">
-<link rel="icon" href="icone.png">
+<meta name="description" content="Área do sócio e Palpitaço do Consulado Gremista de Serra Alta/SC.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://consuladosa.github.io/">
+<meta property="og:title" content="Consulado Gremista de Serra Alta">
+<meta property="og:description" content="Área do sócio e Palpitaço Tricolor.">
+<meta property="og:image" content="https://consuladosa.github.io/compartilhar.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="https://consuladosa.github.io/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="https://consuladosa.github.io/favicon.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
@@ -33,6 +42,14 @@ nav.abas{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--br
 nav.abas button{flex:1;border:0;background:none;padding:10px 4px 12px;color:var(--suave);font:600 .95rem var(--disp);letter-spacing:.02em;border-top:3px solid transparent}
 nav.abas button[aria-current="true"]{color:var(--azul);border-top-color:var(--azul)}
 .tela{display:none}.tela.ativa{display:block}
+#barra{display:flex;align-items:center;gap:10px;margin:-4px 0 12px}#barra[hidden]{display:none}
+#barra button{border:1px solid var(--linha);background:var(--branco);color:var(--azul);border-radius:8px;padding:8px 12px;font:700 1rem var(--disp);cursor:pointer}
+#barra b{font:800 1.3rem var(--disp)}
+nav.abas[hidden]{display:none}
+.home-logo{display:block;width:120px;height:120px;margin:4px auto 14px;border-radius:50%}
+.area{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--branco);border:1px solid var(--linha);border-left:6px solid var(--azul);border-radius:12px;padding:18px 16px;margin:0 0 12px;cursor:pointer;color:var(--texto)}
+.area b{display:block;font:800 1.6rem/1.1 var(--disp)}.area span{color:var(--suave);font-size:.95rem}.area .seta{margin-left:auto;font:800 1.8rem var(--disp);color:var(--azul)}
+.area.palp{border-left-color:var(--preto)}
 h2{font:800 1.6rem/1.1 var(--disp);margin:18px 0 10px}
 h3{font:700 1.2rem/1.2 var(--disp);margin:16px 0 8px}
 .bloco{background:var(--branco);border:1px solid var(--linha);border-radius:10px;padding:14px;margin:0 0 12px}
@@ -135,22 +152,31 @@ tr.detalhe td{background:#F7FAFC;padding:6px 8px 10px}
 <div class="listras" aria-hidden="true"></div>
 <header>
   <h1>Consulado Gremista de Serra Alta</h1>
-  <p id="sub">Palpitaço, anuidade e regulamento</p>
+  <p id="sub">Área do sócio e Palpitaço</p>
 </header>
 
 <main>
-<!-- INÍCIO -->
-<section id="t-inicio" class="tela ativa" aria-label="Início">
-  <div id="hero"><div class="carregando">Carregando…</div></div>
-  <div id="ini-quem"></div>
-  <div id="ini-lideres"></div>
-  <div id="ini-ultimo"></div>
-  <div id="ini-reuniao"></div>
+<div id="barra" hidden><button id="b-volta" type="button">‹ Início</button><b id="barra-t"></b></div>
+<!-- TELA INICIAL: escolha da área -->
+<section id="t-home" class="tela ativa" aria-label="Início">
+  <img class="home-logo" src="https://consuladosa.github.io/icone.png" alt="" onerror="this.remove()">
+  <button class="area" data-area="socio" type="button"><div><b>Área do sócio</b><span>Anuidade, Palpitaço e outros pagamentos, próxima reunião</span></div><span class="seta">›</span></button>
+  <button class="area palp" data-area="palp" type="button"><div><b>Palpitaço</b><span>Próximo jogo, palpites, classificação e prêmios</span></div><span class="seta">›</span></button>
+  <div id="home-reuniao"></div>
   <div class="bloco">
     <h3 style="margin-top:0">Salvar na tela do celular</h3>
     <p class="suave" style="margin:0">Android: menu ⋮ do navegador › <b>Adicionar à tela inicial</b>.<br>iPhone: botão Compartilhar › <b>Adicionar à Tela de Início</b>.</p>
   </div>
   <div id="ini-contato" class="suave" style="text-align:center"></div>
+</section>
+
+<!-- PALPITAÇO: INÍCIO -->
+<section id="t-inicio" class="tela" aria-label="Próximo jogo">
+  <div id="hero"><div class="carregando">Carregando…</div></div>
+  <div id="ini-quem"></div>
+  <div id="ini-lideres"></div>
+  <div id="ini-ultimo"></div>
+  <div id="ini-reuniao" hidden></div>
 </section>
 
 <!-- PALPITAR -->
@@ -176,18 +202,18 @@ tr.detalhe td{background:#F7FAFC;padding:6px 8px 10px}
 </section>
 
 <!-- ANUIDADE -->
-<section id="t-anu" class="tela" aria-label="Anuidade">
+<section id="t-anu" class="tela" aria-label="Área do sócio">
   <h2>Minha situação</h2>
   <div id="anu"></div>
+  <div id="socio-reuniao"></div>
 </section>
 
 </main>
 
-<nav class="abas" aria-label="Seções">
-  <button data-t="inicio" aria-current="true">Início</button>
+<nav class="abas" aria-label="Palpitaço" hidden>
+  <button data-t="inicio" aria-current="true">Próximo jogo</button>
   <button data-t="palpitar" aria-current="false">Palpitar</button>
-  <button data-t="palp" aria-current="false">Palpitaço</button>
-  <button data-t="anu" aria-current="false">Anuidade</button>
+  <button data-t="palp" aria-current="false">Classificação</button>
 </nav>
 
 <script>
@@ -214,6 +240,15 @@ function erro(m){return '<div class="msg erro" role="alert">'+esc(m)+'</div>'}
 
 /* navegação */
 document.querySelectorAll('nav.abas button').forEach(function(b){b.onclick=function(){abrir(b.dataset.t)}});
+/* áreas: tela inicial, Área do sócio e Palpitaço (o site lembra a última) */
+var AREA_NOME={socio:'Área do sócio',palp:'Palpitaço'};
+function area(a){Mem.set('cs_area',a);var home=a==='home';
+  $('#barra').hidden=home;$('#barra-t').textContent=AREA_NOME[a]||'';document.querySelector('nav.abas').hidden=a!=='palp';
+  if(home){document.querySelectorAll('.tela').forEach(function(s){s.classList.toggle('ativa',s.id==='t-home')});window.scrollTo(0,0);return}
+  if(a==='socio'){document.querySelectorAll('.tela').forEach(function(s){s.classList.toggle('ativa',s.id==='t-anu')});window.scrollTo(0,0);return}
+  var t=Mem.get('cs_aba');abrir(t&&['inicio','palpitar','palp'].indexOf(t)>=0?t:'inicio')}
+document.querySelectorAll('[data-area]').forEach(function(b){b.onclick=function(){area(b.dataset.area)}});
+$('#b-volta').onclick=function(){area('home')};
 function abrir(t){Mem.set('cs_aba',t);document.querySelectorAll('.tela').forEach(function(s){s.classList.toggle('ativa',s.id==='t-'+t)});
   document.querySelectorAll('nav.abas button').forEach(function(b){b.setAttribute('aria-current',b.dataset.t===t)});window.scrollTo(0,0)}
 document.querySelectorAll('#t-palp > .chips .chip').forEach(function(c){c.onclick=function(){sub(c.dataset.sub)}});
@@ -252,7 +287,8 @@ function inicio(){
   var u=PUB.ultimo;
   $('#ini-ultimo').innerHTML=u?'<div class="bloco"><h3 style="margin-top:0">Último resultado</h3><div style="font:800 1.8rem var(--disp)">'+esc(u.jogo.mandante)+' '+u.jogo.gm+' x '+u.jogo.gv+' '+esc(u.jogo.visitante)+'</div><p class="suave" style="margin:2px 0 0">'+dh(u.jogo.data,1)+(u.jogo.goleadores?' · Gols: '+esc(u.jogo.goleadores.split(';').map(function(x){return x.split(' - ').pop()}).join(', ')):'')+'</p></div>':'';
   var rr=PUB.reuniao;
-  $('#ini-reuniao').innerHTML=rr?'<div class="bloco"><h3 style="margin-top:0">Próxima reunião do Consulado</h3><div style="font:800 1.5rem var(--disp)">'+dh(rr.data,1)+'</div><p class="suave" style="margin:2px 0 0">'+rr.numero+'ª reunião ordinária'+(rr.obs?' · '+esc(rr.obs):'')+'</p></div>':'';
+  var _r=rr?'<div class="bloco"><h3 style="margin-top:0">Próxima reunião do Consulado</h3><div style="font:800 1.5rem var(--disp)">'+dh(rr.data,1)+'</div><p class="suave" style="margin:2px 0 0">'+rr.numero+'ª reunião ordinária'+(rr.obs?' · '+esc(rr.obs):'')+'</p></div>':'';
+  $('#home-reuniao').innerHTML=_r;$('#socio-reuniao').innerHTML=_r;
   var c=PUB.contato;
   $('#ini-contato').innerHTML=(c.instagram?'<a href="'+esc(c.instagram)+'" target="_blank" rel="noopener">Instagram</a> · ':'')+(c.whatsapp?'<a href="https://wa.me/'+esc(c.whatsapp)+'" target="_blank" rel="noopener">WhatsApp do Consulado</a>':'');
 }
@@ -310,12 +346,12 @@ function premios(){
 
 /* ===== meu palpitaço ===== */
 function telaLogin(m){
-  $('#s-meu').innerHTML='<div class="bloco"><h3 style="margin-top:0">Entrar no Palpitaço</h3><p class="suave" style="margin:0">Use seu CPF e o código de validação que você recebeu na inscrição.</p>'+(m?erro(m):'')+
+  $('#s-meu').innerHTML='<div class="bloco"><h3 style="margin-top:0">Entrar no Palpitaço</h3><p class="suave" style="margin:0">Use seu CPF e o código de validação que você recebeu na inscrição. Ainda não participa? Fale com a diretoria para se inscrever. Sua anuidade fica na <a href="#" id="lp-socio">Área do sócio</a>.</p>'+(m?erro(m):'')+
   '<form id="lp-form" action="#" method="post" autocomplete="on">'+
   '<label for="lp-cpf">CPF</label><input id="lp-cpf" name="username" type="text" inputmode="numeric" autocomplete="username" placeholder="000.000.000-00">'+
   '<label for="lp-cod">Código de validação</label><input id="lp-cod" name="password" type="password" inputmode="numeric" autocomplete="current-password">'+
   caixaManter('lp-man')+'<p><button class="btn larg" id="lp-ok" type="submit">Entrar</button></p></form><div id="lp-msg"></div></div>';
-  mascaraCpf($('#lp-cpf'));
+  mascaraCpf($('#lp-cpf'));var ls=$('#lp-socio');if(ls)ls.onclick=function(e){e.preventDefault();area('socio')};
   $('#lp-form').onsubmit=function(ev){ev.preventDefault();var b=$('#lp-ok');b.disabled=true;$('#lp-msg').innerHTML='';
     var man=$('#lp-man').checked;
     run('loginPalpitaco',$('#lp-cpf').value,$('#lp-cod').value,man).then(function(r){TOKEN=r.token;AREA=r.area;if(man)Mem.set('cs_tk_p',r.token);else Mem.del('cs_tk_p');minha();classif()}).catch(function(e){$('#lp-msg').innerHTML=erro(e);b.disabled=false})};
@@ -432,9 +468,9 @@ function regras(){
 }
 
 /* volta para a aba em que a pessoa estava (F5) */
-(function(){var a=Mem.get('cs_aba'),s=Mem.get('cs_sub'),d=Mem.get('cs_div');
+(function(){var s=Mem.get('cs_sub'),d=Mem.get('cs_div'),ar=Mem.get('cs_area');
   if(d)DIV=d;if(s&&document.querySelector('#t-palp .chip[data-sub="'+s+'"]'))sub(s);
-  if(a&&document.getElementById('t-'+a))abrir(a);})();
+  area(ar==='socio'||ar==='palp'?ar:'home');})();
 telaAnuidade();
 (function(){var ta=Mem.get('cs_tk_a');if(ta){TK_A=ta;$('#anu').innerHTML='<div class="carregando">Abrindo…</div>';
   run('consultaAnuidade',ta).then(mostraAnuidade).catch(function(){Mem.del('cs_tk_a');TK_A=null;telaAnuidade()})}})();
