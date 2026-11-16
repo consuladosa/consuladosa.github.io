@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Consulado Gremista de Serra Alta</title>
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Consulado SA">
+<meta name="description" content="Área do sócio e Palpitaço do Consulado Gremista de Serra Alta/SC.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://consuladosa.github.io/">
+<meta property="og:title" content="Consulado Gremista de Serra Alta">
+<meta property="og:description" content="Área do sócio e Palpitaço Tricolor.">
+<meta property="og:image" content="https://consuladosa.github.io/compartilhar.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="https://consuladosa.github.io/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="https://consuladosa.github.io/favicon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --azul:#0D80BF; --azul-esc:#075E8E; --preto:#000; --branco:#fff;
+  --fundo:#EEF3F7; --texto:#1E2933; --suave:#5B6B79; --linha:#D5DEE6;
+  --lib:#1A1A1A; --copa:#2E7D32; --serieb:#E07B00; --ok:#2E7D32; --erro:#C62828;
+  --disp:'Barlow Condensed','Arial Narrow',Arial,sans-serif; --corpo:'Barlow',Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--fundo);color:var(--texto);font:16px/1.45 var(--corpo)}
+button,input,select{font:inherit}
+.listras{height:10px;background:repeating-linear-gradient(90deg,var(--azul) 0 22px,var(--preto) 22px 30px,var(--branco) 30px 34px,var(--preto) 34px 42px)}
+header{background:var(--preto);color:var(--branco);padding:14px 18px 12px}
+header h1{margin:0;font:800 1.5rem/1 var(--disp);letter-spacing:.01em}
+header p{margin:4px 0 0;color:#9FB3C2;font-size:.9rem}
+main{max-width:720px;margin:0 auto;padding:16px 14px 96px}
+nav.abas{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--branco);border-top:1px solid var(--linha);z-index:5;padding-bottom:env(safe-area-inset-bottom)}
+nav.abas button{flex:1;border:0;background:none;padding:10px 4px 12px;color:var(--suave);font:600 .95rem var(--disp);letter-spacing:.02em;border-top:3px solid transparent}
+nav.abas button[aria-current="true"]{color:var(--azul);border-top-color:var(--azul)}
+.tela{display:none}.tela.ativa{display:block}
+#barra{display:flex;align-items:center;gap:10px;margin:-4px 0 12px}#barra[hidden]{display:none}
+#barra button{border:1px solid var(--linha);background:var(--branco);color:var(--azul);border-radius:8px;padding:8px 12px;font:700 1rem var(--disp);cursor:pointer}
+#barra b{font:800 1.3rem var(--disp)}
+nav.abas[hidden]{display:none}
+.home-logo{display:block;width:120px;height:120px;margin:4px auto 14px;border-radius:50%}
+.area{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--branco);border:1px solid var(--linha);border-left:6px solid var(--azul);border-radius:12px;padding:18px 16px;margin:0 0 12px;cursor:pointer;color:var(--texto)}
+.area b{display:block;font:800 1.6rem/1.1 var(--disp)}.area span{color:var(--suave);font-size:.95rem}.area .seta{margin-left:auto;font:800 1.8rem var(--disp);color:var(--azul)}
+.area.palp{border-left-color:var(--preto)}
+h2{font:800 1.6rem/1.1 var(--disp);margin:18px 0 10px}
+h3{font:700 1.2rem/1.2 var(--disp);margin:16px 0 8px}
+.bloco{background:var(--branco);border:1px solid var(--linha);border-radius:10px;padding:14px;margin:0 0 12px}
+.suave{color:var(--suave);font-size:.92rem}
+.btn{display:inline-block;border:0;border-radius:8px;background:var(--azul);color:var(--branco);padding:12px 18px;font:700 1.05rem var(--disp);letter-spacing:.02em;cursor:pointer;text-decoration:none;text-align:center}
+.btn:active{background:var(--azul-esc)}
+.btn.sec{background:var(--branco);color:var(--azul);border:2px solid var(--azul)}
+.btn.larg{width:100%}
+.btn[disabled]{opacity:.5}
+:focus-visible{outline:3px solid #F2B705;outline-offset:2px}
+label{display:block;font-weight:600;margin:10px 0 4px}
+input[type=text],input[type=date],input[type=number],input[type=password],select{width:100%;padding:11px 12px;border:1px solid #B8C6D2;border-radius:8px;background:var(--branco)}
+.msg{padding:10px 12px;border-radius:8px;margin:10px 0;font-weight:500}
+.msg.erro{background:#FDECEC;color:var(--erro)}.msg.ok{background:#E8F5E9;color:var(--ok)}
+/* placar do próximo jogo — elemento de destaque */
+.jogo-hero{background:var(--preto);color:var(--branco);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.jogo-hero .topo{padding:12px 16px 0;color:#9FB3C2;font-size:.9rem}
+.jogo-hero .times{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:6px 16px 4px;gap:8px}
+.jogo-hero .time{font:800 2.6rem/1 var(--disp);letter-spacing:.01em;text-align:center;overflow-wrap:anywhere}
+.jogo-hero .time.longo{font-size:clamp(1.3rem,7vw,2rem)}
+.jogo-hero .x{font:700 1.4rem var(--disp);color:var(--azul)}
+.jogo-hero .conta{display:flex;justify-content:center;gap:14px;padding:6px 16px 14px}
+.jogo-hero .conta div{text-align:center}
+.jogo-hero .conta b{display:block;font:700 1.8rem/1 var(--disp);color:var(--branco)}
+.jogo-hero .conta span{font-size:.78rem;color:#9FB3C2}
+.jogo-hero .rodape{background:var(--azul);padding:12px 16px}
+.jogo-hero .rodape .btn{background:var(--branco);color:var(--preto);width:100%}
+/* classificação */
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:8px}
+.chip{border:1px solid #B8C6D2;background:var(--branco);border-radius:999px;padding:7px 13px;font-weight:600;white-space:nowrap;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--azul);border-color:var(--azul);color:var(--branco)}
+table{width:100%;border-collapse:collapse}
+.tab-wrap{overflow-x:auto;background:var(--branco);border:1px solid var(--linha);border-radius:10px}
+th{font:700 .9rem var(--disp);text-align:left;color:var(--suave);padding:9px 8px;border-bottom:1px solid var(--linha)}
+td{padding:9px 8px;border-bottom:1px solid #EDF1F5;vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.pos{width:38px;font:700 1.1rem var(--disp);text-align:center}
+td.pts{text-align:right;font:700 1.15rem var(--disp);white-space:nowrap}
+th.pts{text-align:right}
+tr.sobe td.pos{box-shadow:inset 5px 0 0 var(--copa)}
+tr.cai td.pos{box-shadow:inset 5px 0 0 var(--serieb)}
+tr.eu td{background:#E6F2FA}
+.desemp{display:block;font-size:.78rem;color:var(--suave)}
+.legenda{display:flex;gap:14px;font-size:.82rem;color:var(--suave);margin:8px 2px}
+.legenda i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.div-tag{display:inline-block;font:700 .78rem var(--disp);padding:2px 7px;border-radius:4px;color:var(--branco)}
+.d-LIBERTADORES{background:var(--lib)}.d-COPA{background:var(--copa)}.d-SERIE{background:var(--serieb)}.d-GERAL{background:var(--azul)}
+/* palpite */
+.opcoes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.opcoes.duas{grid-template-columns:repeat(2,1fr)}
+.op{border:2px solid #B8C6D2;background:var(--branco);border-radius:8px;padding:10px 4px;font-weight:600;cursor:pointer;text-align:center;word-break:break-word}
+.op[aria-pressed="true"]{border-color:var(--azul);background:var(--azul);color:var(--branco)}
+.op[disabled]{opacity:.55}
+.placar{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+.placar input{text-align:center;font:700 1.6rem var(--disp)}
+.recibo{border-left:5px solid var(--ok)}
+.linha-hist{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #EDF1F5}
+.linha-hist:last-child{border-bottom:0}
+.premio{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--linha)}
+.premio:last-child{border-bottom:0}
+.cab-premio{color:var(--branco);margin:-14px -14px 10px;padding:10px 14px;border-radius:10px 10px 0 0;font:700 1.1rem var(--disp);display:flex;justify-content:space-between}
+.anos td.st{font-weight:600}
+.sit{font-size:.92rem}
+.sit-cab,.sit-lin{display:grid;grid-template-columns:2.4rem 1fr 1fr 4.6rem;gap:6px;align-items:start}
+.sit-cab{font:700 .82rem var(--disp);color:var(--suave);padding:8px 0;border-bottom:1px solid var(--linha)}
+.sit-cab span:last-child,.sit-lin .t{text-align:right}
+.sit-lin{padding:10px 0;border-bottom:1px solid #EDF1F5}
+.sit-lin:last-child{border-bottom:0}
+.sit .ano{font:700 1.05rem var(--disp)}
+.sit .it{margin-bottom:6px}
+.sit .v{font-weight:700;color:var(--texto)}
+.sit .pg{color:var(--suave);font-size:.85rem}
+.sit .falta{color:var(--erro);font-weight:700;white-space:nowrap;font-size:.86rem}
+.sit .v{white-space:nowrap}
+.sit .rot{color:var(--suave);font-size:.78rem}
+.sit .tot{font-size:.95rem}
+.sit .emdia{color:var(--ok);font-weight:700}
+@media (max-width:360px){.sit-cab{display:none}.sit-lin{grid-template-columns:1fr 1fr}.sit-lin .ano{grid-column:1/-1}.sit-lin .t{grid-column:1/-1;text-align:left}}
+tr.abre{cursor:pointer}
+tr.abre td:first-child::after{content:' ▾';color:var(--suave);font-size:.8rem}
+tr.detalhe td{background:#F7FAFC;padding:6px 8px 10px}
+.partes{width:100%;font-size:.88rem}
+.partes td{border:0;padding:3px 6px}
+.partes .n{text-align:right;font-weight:600;white-space:nowrap}
+.neg{color:var(--erro)}.pos{color:var(--ok)}
+.quem-topo{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.quem-topo b{font:800 1.5rem var(--disp)}
+.barra{height:8px;background:#E3EAF0;border-radius:99px;overflow:hidden;margin:6px 0 12px}
+.barra i{display:block;height:100%;background:var(--ok)}
+.nomes{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+.nome-chip{padding:4px 10px;border-radius:999px;font-size:.88rem;background:#E8F5E9;color:#1B5E20}
+.nome-chip.falta{background:#F1F4F7;color:var(--suave)}
+.carregando{color:var(--suave);padding:20px 0;text-align:center}
+.regras p,.regras li{max-width:68ch}
+.regras table td,.regras table th{padding:6px 8px}
+/* tesouraria */
+.t-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.t-kpi{background:var(--branco);border:1px solid var(--linha);border-top:4px solid var(--c,var(--azul));border-radius:10px;padding:8px 9px;min-width:0}
+.t-kpi small{display:block;font:700 .72rem var(--disp);letter-spacing:.08em;color:var(--suave);text-transform:uppercase}.t-kpi b{font:800 clamp(1rem,4.6vw,1.25rem) var(--disp);white-space:nowrap}
+.t-abas{display:flex;background:var(--branco);border:1px solid var(--linha);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.t-abas button{flex:1;border:0;background:none;padding:10px 4px;font:700 1rem var(--disp);color:var(--suave);cursor:pointer}.t-abas button[aria-pressed="true"]{background:var(--azul);color:var(--branco)}
+.pessoa{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--linha)}.pessoa:last-child{border-bottom:0}
+.pessoa .n{flex:1;min-width:0}.pessoa .n b{display:block}.pessoa .n span{font-size:.85rem;color:var(--suave)}
+.pessoa .v{font:800 1.15rem var(--disp);color:var(--erro);white-space:nowrap}
+.pessoa button{border:0;border-radius:8px;background:var(--ok);color:var(--branco);font:700 .95rem var(--disp);padding:9px 12px;cursor:pointer}
+.mov{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--linha)}.mov:last-child{border-bottom:0}
+.mov .n{flex:1;min-width:0}.mov .n span{display:block;font-size:.82rem;color:var(--suave)}.mov .v{font:800 1.1rem var(--disp);white-space:nowrap}
+.mov a{color:var(--azul)}
+.ttag{display:inline-block;font:700 .72rem var(--disp);letter-spacing:.04em;padding:1px 6px;border-radius:4px;background:#E3F2FD;color:var(--azul);margin-left:4px}
+.seg2{display:flex;gap:6px}.seg2 button{flex:1;border:1px solid var(--azul);background:var(--branco);color:var(--azul);border-radius:8px;padding:11px;font:700 1rem var(--disp);cursor:pointer}.seg2 button[aria-pressed="true"]{background:var(--azul);color:var(--branco)}
+#tes-pe{position:fixed;left:0;right:0;bottom:0;background:var(--branco);border-top:1px solid var(--linha);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;z-index:6}
+#tes-pe .btn{flex:1;padding:12px 8px}
+#tes-pe[hidden],.bloco[hidden]{display:none}
+.grupo{border-bottom:1px solid var(--linha);padding:10px 0}.grupo:last-child{border-bottom:0}
+.grupo-cab{display:flex;align-items:center;gap:8px}.grupo-cab b{flex:1;min-width:0;font-size:1.05rem}.grupo-cab .tot{font:800 1.15rem var(--disp);color:var(--erro);white-space:nowrap}
+.grupo-cab button{border:1px solid var(--azul);background:var(--branco);color:var(--azul);border-radius:8px;font:700 .9rem var(--disp);padding:7px 10px;cursor:pointer;white-space:nowrap}
+.item{display:flex;align-items:center;gap:10px;padding:8px 0 0 2px;cursor:pointer}.item input{width:24px;height:24px;flex:none;accent-color:var(--ok)}
+.item .d{flex:1;min-width:0;font-size:.92rem;color:var(--suave)}.item .d b{color:var(--texto);font-weight:600}.item .fv{font:700 1.05rem var(--disp);white-space:nowrap}
+.item.sel .d b{color:var(--ok)}
+#t-selbar{position:fixed;left:0;right:0;bottom:calc(66px + env(safe-area-inset-bottom));background:var(--ok);color:var(--branco);display:flex;align-items:center;gap:10px;padding:10px 14px;z-index:6}
+#t-selbar[hidden]{display:none}#t-selbar span{flex:1;font-weight:600}#t-selbar b{font:800 1.3rem var(--disp)}
+#t-selbar button{border:0;border-radius:8px;background:var(--branco);color:var(--ok);font:800 1.05rem var(--disp);padding:10px 14px;cursor:pointer}
+#t-selbar .lp{background:none;color:var(--branco);text-decoration:underline;font-weight:600;padding:10px 4px}
+.divide{display:grid;grid-template-columns:1fr 1fr;gap:8px}.atalhos{display:flex;gap:6px;margin-top:8px}.atalhos button{flex:1;border:1px solid var(--linha);background:var(--fundo);border-radius:8px;padding:8px;font:700 .9rem var(--disp);cursor:pointer}
+.tot-dlg{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--linha);margin-top:8px;padding-top:8px}.tot-dlg b{font:800 1.5rem var(--disp)}
+dialog#tdlg{border:0;border-radius:14px;padding:0;width:calc(100% - 24px);max-width:420px}dialog#tdlg::backdrop{background:rgba(0,0,0,.5)}
+#tdlg .cab{background:var(--preto);color:var(--branco);padding:12px 14px;font:800 1.15rem var(--disp);border-bottom:4px solid var(--azul)}#tdlg .corpo{padding:4px 14px 12px;max-height:70vh;overflow:auto}#tdlg .pe{display:flex;gap:8px;padding:0 14px 14px}#tdlg .pe .btn{flex:1}
+.link-tes{display:block;margin:18px auto 0;background:none;border:0;color:var(--suave);text-decoration:underline;font-size:.9rem;cursor:pointer}
+@media (prefers-reduced-motion:no-preference){.ativa{animation:surge .18s ease-out}@keyframes surge{from{opacity:.4}to{opacity:1}}}
+</style>
+</head>
+<body>
+<div class="listras" aria-hidden="true"></div>
+<header>
+  <h1>Consulado Gremista de Serra Alta</h1>
+  <p id="sub">Área do sócio e Palpitaço</p>
+</header>
+
+<main>
+<div id="barra" hidden><button id="b-volta" type="button">‹ Início</button><b id="barra-t"></b></div>
+<!-- TELA INICIAL: escolha da área -->
+<section id="t-home" class="tela ativa" aria-label="Início">
+  <img class="home-logo" src="https://consuladosa.github.io/icone.png" alt="" onerror="this.remove()">
+  <button class="area" data-area="socio" type="button"><div><b>Área do sócio</b><span>Anuidade, Palpitaço e outros pagamentos, próxima reunião</span></div><span class="seta">›</span></button>
+  <button class="area palp" data-area="palp" type="button"><div><b>Palpitaço</b><span>Próximo jogo, palpites, classificação e prêmios</span></div><span class="seta">›</span></button>
+  <div id="home-reuniao"></div>
+  <div class="bloco">
+    <h3 style="margin-top:0">Salvar na tela do celular</h3>
+    <p class="suave" style="margin:0">Android: menu ⋮ do navegador › <b>Adicionar à tela inicial</b>.<br>iPhone: botão Compartilhar › <b>Adicionar à Tela de Início</b>.</p>
+  </div>
+  <div id="ini-contato" class="suave" style="text-align:center"></div>
+  <button class="link-tes" data-area="tes" type="button">Acesso do tesoureiro</button>
+</section>
+
+<!-- PALPITAÇO: INÍCIO -->
+<section id="t-inicio" class="tela" aria-label="Próximo jogo">
+  <div id="hero"><div class="carregando">Carregando…</div></div>
+  <div id="ini-quem"></div>
+  <div id="ini-lideres"></div>
+  <div id="ini-ultimo"></div>
+  <div id="ini-reuniao" hidden></div>
+</section>
+
+<!-- PALPITAR -->
+<section id="t-palpitar" class="tela" aria-label="Palpitar">
+  <div id="s-meu"></div>
+</section>
+
+<!-- PALPITAÇO -->
+<section id="t-palp" class="tela" aria-label="Palpitaço">
+  <div class="chips" role="tablist">
+    <button class="chip" data-sub="class" aria-pressed="true">Classificação</button>
+    <button class="chip" data-sub="jogo" aria-pressed="false">Último jogo</button>
+    <button class="chip" data-sub="premios" aria-pressed="false">Prêmios</button>
+    <button class="chip" data-sub="regras" aria-pressed="false">Regulamento</button>
+  </div>
+  <div id="s-class">
+    <div class="chips" id="chips-div"></div>
+    <div id="tab-class"></div>
+  </div>
+  <div id="s-jogo" hidden></div>
+  <div id="s-premios" hidden></div>
+  <div id="s-regras" class="regras" hidden><div id="regras"></div></div>
+</section>
+
+<!-- TESOURARIA (só para o tesoureiro cadastrado no admin) -->
+<section id="t-tes" class="tela" aria-label="Tesouraria">
+  <div id="tes"></div>
+</section>
+
+<!-- ANUIDADE -->
+<section id="t-anu" class="tela" aria-label="Área do sócio">
+  <h2>Minha situação</h2>
+  <div id="anu"></div>
+  <div id="socio-reuniao"></div>
+</section>
+
+</main>
+
+<div id="t-selbar" hidden><span id="ts-n"></span><b id="ts-v"></b><button class="lp" id="ts-limpa" type="button">Limpar</button><button id="ts-ok" type="button">Receber</button></div>
+<div id="tes-pe" hidden><button class="btn sec" id="tp-av" type="button">+ Receb. avulso</button><button class="btn" id="tp-enc" type="button">Encerrar caixinha</button></div>
+<dialog id="tdlg"><div class="cab" id="tdlg-t"></div><div class="corpo" id="tdlg-c"></div><div class="pe"><button class="btn sec" id="tdlg-x" type="button">Cancelar</button><button class="btn" id="tdlg-ok" type="button" style="background:var(--ok)">Confirmar</button></div></dialog>
+<nav class="abas" aria-label="Palpitaço" hidden>
+  <button data-t="inicio" aria-current="true">Próximo jogo</button>
+  <button data-t="palpitar" aria-current="false">Palpitar</button>
+  <button data-t="palp" aria-current="false">Classificação</button>
+</nav>
+
+<script>
+var PUB=null, TOKEN=null, AREA=null, DIV='GERAL', TIMERS=[], TK_A=null;
+/* login lembrado no aparelho (30 dias) */
+var Mem={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}},del:function(k){try{localStorage.removeItem(k)}catch(e){}}};
+function caixaManter(id){return '<label style="display:flex;gap:8px;align-items:center;font-weight:500;margin:12px 0 0"><input type="checkbox" id="'+id+'" checked style="width:20px;height:20px"> Manter conectado neste aparelho</label>'}
+var $=function(s){return document.querySelector(s)};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function pts(n){return (Math.round(n*10)/10).toString().replace('.',',')}
+function rs(n){return 'R$ '+Number(n||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function dh(iso,soData){if(!iso)return '';var d=new Date(iso);var o={timeZone:'America/Sao_Paulo',day:'2-digit',month:'2-digit'};if(!soData){o.hour='2-digit';o.minute='2-digit'}return d.toLocaleString('pt-BR',o)}
+function nomeJogo(j){return esc(j.mandante)+' x '+esc(j.visitante)}
+function divCls(d){d=String(d||'').toUpperCase();return d.indexOf('LIBERT')===0?'d-LIBERTADORES':d.indexOf('COPA')===0?'d-COPA':d.indexOf('S')===0?'d-SERIE':'d-GERAL'}
+/* Link do Site público (Apps Script › Gerenciar implantações › Site público › URL do app da Web) */
+var API_URL='https://script.google.com/macros/s/AKfycbwedG0esALrPeM7bXlSbqsHtuoVHpHALLNzcONBa7pHy1MXCoTL4vAptkK8hGwwFuL4/exec';
+function run(fn){var a=[].slice.call(arguments,1);
+  if(window.google&&google.script&&google.script.run)return new Promise(function(ok,ko){google.script.run.withSuccessHandler(ok).withFailureHandler(function(e){ko(e&&e.message?e.message.replace(/^Exception: |^Error: /,''):String(e))})[fn].apply(null,a)});
+  return fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn:fn,args:a})})
+    .then(function(r){return r.json()},function(){throw 'Sem conexão. Verifique a internet e tente de novo.'})
+    .then(function(j){if(!j||!j.ok)throw (j&&j.erro)||'Erro no servidor.';return j.r})
+    .catch(function(e){throw typeof e==='string'?e:'Não foi possível falar com o servidor. Tente de novo.'})}
+function erro(m){return '<div class="msg erro" role="alert">'+esc(m)+'</div>'}
+
+/* navegação */
+document.querySelectorAll('nav.abas button').forEach(function(b){b.onclick=function(){abrir(b.dataset.t)}});
+/* áreas: tela inicial, Área do sócio e Palpitaço (o site lembra a última) */
+var AREA_NOME={socio:'Área do sócio',palp:'Palpitaço',tes:'Tesouraria'};
+function area(a){Mem.set('cs_area',a);var home=a==='home';$('#tes-pe').hidden=true;$('#t-selbar').hidden=true;
+  $('#barra').hidden=home;$('#barra-t').textContent=AREA_NOME[a]||'';document.querySelector('nav.abas').hidden=a!=='palp';
+  if(home){document.querySelectorAll('.tela').forEach(function(s){s.classList.toggle('ativa',s.id==='t-home')});window.scrollTo(0,0);return}
+  if(a==='socio'){document.querySelectorAll('.tela').forEach(function(s){s.classList.toggle('ativa',s.id==='t-anu')});window.scrollTo(0,0);return}
+  if(a==='tes'){document.querySelectorAll('.tela').forEach(function(s){s.classList.toggle('ativa',s.id==='t-tes')});window.scrollTo(0,0);tesAbre();return}
+  var t=Mem.get('cs_aba');abrir(t&&['inicio','palpitar','palp'].indexOf(t)>=0?t:'inicio')}
+document.querySelectorAll('[data-area]').forEach(function(b){b.onclick=function(){area(b.dataset.area)}});
+$('#b-volta').onclick=function(){area('home')};
+function abrir(t){Mem.set('cs_aba',t);document.querySelectorAll('.tela').forEach(function(s){s.classList.toggle('ativa',s.id==='t-'+t)});
+  document.querySelectorAll('nav.abas button').forEach(function(b){b.setAttribute('aria-current',b.dataset.t===t)});window.scrollTo(0,0)}
+document.querySelectorAll('#t-palp > .chips .chip').forEach(function(c){c.onclick=function(){sub(c.dataset.sub)}});
+function sub(s){Mem.set('cs_sub',s);document.querySelectorAll('#t-palp > .chips .chip').forEach(function(c){c.setAttribute('aria-pressed',c.dataset.sub===s)});
+  ['class','jogo','premios','regras'].forEach(function(k){$('#s-'+k).hidden=k!==s})}
+
+/* contagem regressiva */
+function falta(iso){var ms=new Date(iso)-Date.now();if(ms<=0)return null;var d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4),s=Math.floor(ms%6e4/1e3);return{d:d,h:h,m:m,s:s}}
+function relogio(){TIMERS.forEach(function(f){f()})}
+setInterval(relogio,1000);
+
+/* ===== carga pública ===== */
+function carregar(){run('apiPublico').then(function(p){PUB=p;$('#sub').textContent='Palpitaço '+p.ano+' · atualizado '+dh(p.atualizado);
+  inicio();classif();ultimo();premios();regras();
+  if(!TOKEN){var tp=Mem.get('cs_tk_p');
+    if(tp){$('#s-meu').innerHTML='<div class="carregando">Abrindo…</div>';run('minhaArea',tp).then(function(a){TOKEN=tp;AREA=a;minha();classif()}).catch(function(){Mem.del('cs_tk_p');telaLogin()})}
+    else telaLogin();}}).catch(function(e){$('#hero').innerHTML=erro('Não foi possível carregar: '+e)})}
+
+function inicio(){
+  var j=PUB.proximos[0];TIMERS=TIMERS.filter(function(f){return !f.hero});
+  if(j){
+    $('#hero').innerHTML='<div class="jogo-hero"><div class="topo">'+esc(j.campeonato||'Próximo jogo')+(j.fase?' · '+esc(j.fase):'')+' · '+dh(j.data)+'</div>'+
+    '<div class="times"><div class="time'+(String(j.mandante).length>9?' longo':'')+'">'+esc(j.mandante)+'</div><div class="x">x</div><div class="time'+(String(j.visitante).length>9?' longo':'')+'">'+esc(j.visitante)+'</div></div>'+
+    '<div class="conta" id="cd" aria-live="off"></div><div class="rodape"><button class="btn" id="b-palpitar">Fazer meu palpite</button></div></div>';
+    $('#b-palpitar').onclick=function(){abrir('palpitar')};
+    var f=function(){var r=falta(j.prazo),el=$('#cd');if(!el)return;el.innerHTML=r?['d','h','m','s'].map(function(k,i){return '<div><b>'+r[k]+'</b><span>'+['dias','horas','min','seg'][i]+'</span></div>'}).join(''):'<div><span>Palpites encerrados</span></div>'};f.hero=1;TIMERS.push(f);f();
+    var q=j.quem||[],ok=q.filter(function(x){return x.ok}),nao=q.filter(function(x){return !x.ok});
+    $('#ini-quem').innerHTML=q.length?'<div class="bloco"><div class="quem-topo"><h3 style="margin:0">Quem já palpitou</h3><b>'+ok.length+' de '+q.length+'</b></div>'+
+      '<div class="barra" role="img" aria-label="'+ok.length+' de '+q.length+' palpitaram"><i style="width:'+Math.round(ok.length/q.length*100)+'%"></i></div>'+
+      (ok.length?'<div class="suave">Já palpitaram</div><div class="nomes">'+ok.map(function(x){return '<span class="nome-chip">✓ '+esc(x.nome)+'</span>'}).join('')+'</div>':'')+
+      (nao.length?'<div class="suave">Ainda não palpitaram</div><div class="nomes">'+nao.map(function(x){return '<span class="nome-chip falta">'+esc(x.nome)+'</span>'}).join('')+'</div>':'<div class="msg ok">Todos já palpitaram.</div>')+
+      '<p class="suave" style="margin:0">O conteúdo dos palpites só aparece depois que o prazo fechar.</p></div>':'';
+  } else { $('#ini-quem').innerHTML=''; $('#hero').innerHTML='<div class="bloco"><b>Nenhum jogo aberto para palpite agora.</b><p class="suave" style="margin:4px 0 0">O próximo jogo aparece aqui assim que for cadastrado.</p></div>'; }
+  var g=PUB.geral.slice(0,3);
+  $('#ini-lideres').innerHTML=g.length?'<div class="bloco"><h3 style="margin-top:0">Líderes do Palpitaço</h3>'+g.map(function(a){return '<div class="premio"><span>'+a.pos+'º '+esc(a.nome)+'</span><b>'+pts(a.bra)+' pts</b></div>'}).join('')+'<p style="margin:10px 0 0"><button class="btn sec larg" onclick="abrir(\'palp\');sub(\'class\')">Ver classificação completa</button></p></div>':'';
+  var u=PUB.ultimo;
+  $('#ini-ultimo').innerHTML=u?'<div class="bloco"><h3 style="margin-top:0">Último resultado</h3><div style="font:800 1.8rem var(--disp)">'+esc(u.jogo.mandante)+' '+u.jogo.gm+' x '+u.jogo.gv+' '+esc(u.jogo.visitante)+'</div><p class="suave" style="margin:2px 0 0">'+dh(u.jogo.data,1)+(u.jogo.goleadores?' · Gols: '+esc(u.jogo.goleadores.split(';').map(function(x){return x.split(' - ').pop()}).join(', ')):'')+'</p></div>':'';
+  var rr=PUB.reuniao;
+  var _r=rr?'<div class="bloco"><h3 style="margin-top:0">Próxima reunião do Consulado</h3><div style="font:800 1.5rem var(--disp)">'+dh(rr.data,1)+'</div><p class="suave" style="margin:2px 0 0">'+rr.numero+'ª reunião ordinária'+(rr.obs?' · '+esc(rr.obs):'')+'</p></div>':'';
+  $('#home-reuniao').innerHTML=_r;$('#socio-reuniao').innerHTML=_r;
+  var c=PUB.contato;
+  $('#ini-contato').innerHTML=(c.instagram?'<a href="'+esc(c.instagram)+'" target="_blank" rel="noopener">Instagram</a> · ':'')+(c.whatsapp?'<a href="https://wa.me/'+esc(c.whatsapp)+'" target="_blank" rel="noopener">WhatsApp do Consulado</a>':'');
+}
+
+/* ===== classificação ===== */
+function classif(){
+  var ds=[['GERAL','Geral'],['LIBERTADORES','Libertadores'],['COPA DO BRASIL','Copa do Brasil'],['SÉRIE B','Série B']];
+  $('#chips-div').innerHTML=ds.map(function(d){return '<button class="chip" data-d="'+d[0]+'" aria-pressed="'+(DIV===d[0])+'">'+d[1]+'</button>'}).join('');
+  document.querySelectorAll('#chips-div .chip').forEach(function(c){c.onclick=function(){DIV=c.dataset.d;Mem.set('cs_div',DIV);classif()}});
+  var geral=DIV==='GERAL', lista=geral?PUB.geral:(PUB.divisoes[DIV]||[]), n=lista.length, campo=geral?'bra':'copas';
+  var meu=AREA?AREA.nome:'';
+  var h='<div class="tab-wrap"><table><thead><tr><th>#</th><th>Sócio</th><th class="pts">Pontos</th><th class="pts">Jogos</th></tr></thead><tbody>'+
+    lista.map(function(a,i){var cls=geral?(i<5?'sobe':i>=n-4?'cai':''):'';if(a.nome===meu)cls+=' eu';
+      return '<tr class="'+cls+'"><td class="pos">'+a.pos+'</td><td>'+esc(a.nome)+(a.desempate?'<span class="desemp">Desempate: '+esc(a.desempate)+'</span>':'')+'</td><td class="pts">'+pts(a[campo])+'</td><td class="pts" style="font-weight:500">'+a.jogos+'</td></tr>'}).join('')+
+    '</tbody></table></div>';
+  h+=geral?'<div class="legenda"><span><i style="background:var(--copa)"></i>Sobem para a Libertadores</span><span><i style="background:var(--serieb)"></i>Caem para a Série B</span></div><p class="suave">Geral: pontuação com penalidade por erro (modo BRA).</p>':'<p class="suave">Divisões: pontuação sem penalidade (modo COPAS).</p>';
+  if(!n)h='<div class="bloco">Ninguém nesta divisão ainda.</div>';
+  $('#tab-class').innerHTML=h;
+}
+
+/* ===== último jogo / jogo em andamento ===== */
+function sinal(n){return n>0?'<span class="pos">+'+pts(n)+'</span>':n<0?'<span class="neg">'+pts(n).replace('-','−')+'</span>':'0'}
+function partesHtml(p){return '<table class="partes"><tr><td></td><td class="n suave">Geral</td><td class="n suave">Divisão</td></tr>'+(p||[]).map(function(x){return '<tr><td>'+esc(x[0])+'</td><td class="n">'+sinal(x[1])+'</td><td class="n">'+sinal(x[2])+'</td></tr>'}).join('')+'</table>'}
+function ligarDetalhes(el){el.querySelectorAll('tr.abre').forEach(function(tr){tr.onclick=function(){var d=tr.nextElementSibling;d.hidden=!d.hidden;tr.setAttribute('aria-expanded',!d.hidden)}})}
+function tabelaPalpites(lista,comPontos){
+  var col=comPontos?3:1;
+  return '<div class="tab-wrap"><table><thead><tr><th>Sócio</th><th>Palpite</th>'+(comPontos?'<th class="pts">Geral</th><th class="pts">Div.</th>':'')+'</tr></thead><tbody>'+
+  lista.map(function(p){if(p.semPalpite)return '<tr><td>'+esc(p.nome)+'</td><td class="suave" colspan="'+col+'">Sem palpite</td></tr>';
+    var v={MANDANTE:'Mandante',EMPATE:'Empate',VISITANTE:'Visitante'}[p.vence]||p.vence;
+    var linha='<tr'+(comPontos?' class="abre" tabindex="0" aria-expanded="false"':'')+'><td>'+esc(p.nome)+'</td><td>'+esc(p.placar||v)+' · Ambos: '+esc(p.ambos)+(p.jogadores?'<span class="desemp">'+esc(p.jogadores.split(';').map(function(x){return x.split(' - ').pop()}).join(', '))+'</span>':'')+'</td>'+
+      (comPontos?'<td class="pts">'+pts(p.bra)+'</td><td class="pts" style="font-weight:500">'+pts(p.copas)+'</td>':'')+'</tr>';
+    return linha+(comPontos?'<tr class="detalhe" hidden><td colspan="4">'+partesHtml(p.partes)+'</td></tr>':'')}).join('')+'</tbody></table></div>'+
+  (comPontos?'<p class="suave">Toque num nome para ver onde ganhou e perdeu pontos. Geral tem penalidade por erro; Divisão não.</p>':'');
+}
+function ultimo(){
+  var h='';
+  (PUB.emAndamento||[]).forEach(function(a){h+='<h2>'+nomeJogo(a.jogo)+'</h2><p class="suave">Palpites encerrados · '+dh(a.jogo.data)+'</p>'+tabelaPalpites(a.palpites,false)});
+  var u=PUB.ultimo;
+  if(u){h+='<h2>'+esc(u.jogo.mandante)+' '+u.jogo.gm+' x '+u.jogo.gv+' '+esc(u.jogo.visitante)+'</h2><p class="suave">'+dh(u.jogo.data,1)+(u.jogo.goleadores?' · Gols: '+esc(u.jogo.goleadores.split(';').map(function(x){return x.split(' - ').pop()}).join(', ')):' · Sem gols do Grêmio')+'</p>'+tabelaPalpites(u.palpites,true)}
+  if(PUB.resultados&&PUB.resultados.length){h+='<h3>Resultados da temporada</h3><div class="bloco">'+PUB.resultados.map(function(j){return '<div class="premio"><span>'+dh(j.data,1)+' · '+nomeJogo(j)+(j.bonus?' <span class="div-tag d-GERAL">Bônus</span>':'')+'</span><b>'+j.gm+' x '+j.gv+'</b></div>'}).join('')+'</div>'}
+  $('#s-jogo').innerHTML=h||'<div class="bloco">Nenhum jogo encerrado ainda.</div>';
+  ligarDetalhes($('#s-jogo'));
+}
+
+/* ===== prêmios ===== */
+function premios(){
+  var p=PUB.premiacao, nomes=[['GERAL','Geral','d-GERAL'],['LIBERTADORES','Libertadores','d-LIBERTADORES'],['COPA DO BRASIL','Copa do Brasil','d-COPA'],['SÉRIE B','Série B','d-SERIE']];
+  var h='<div class="bloco"><div class="premio"><span>Inscritos</span><b>'+p.inscritos+' × '+rs(PUB.valorInscricao)+'</b></div><div class="premio"><span>Arrecadação prevista</span><b>'+rs(p.arrecadacao)+'</b></div><div class="premio"><span>Bônus já pagos</span><b>'+rs(p.bonusPagos)+'</b></div><div class="premio"><span>Total em prêmios</span><b>'+rs(p.totalPremios)+'</b></div>'+
+    '<p class="suave" style="margin:8px 0 0">Prêmios previstos se não houver novos bônus. O fundo de bônus (10%) ainda tem '+rs(p.fundoDisponivel)+' disponível; o que sobrar fica na premiação final. Quem estiver devendo a inscrição tem o valor descontado do prêmio.</p></div>';
+  nomes.forEach(function(n){var b=p.blocos[n[0]]||[];var tot=b.reduce(function(s,x){return s+x.valor},0);
+    h+='<div class="bloco"><div class="cab-premio '+n[2]+'"><span>'+n[1]+'</span><span>'+rs(tot)+'</span></div>'+b.map(function(x){return '<div class="premio"><span>'+x.pos+'º lugar</span><b>'+rs(x.valor)+'</b></div>'}).join('')+'</div>'});
+  if(PUB.bonus&&PUB.bonus.length)h+='<h3>Bônus pagos</h3><div class="bloco">'+PUB.bonus.map(function(b){return '<div style="padding:6px 0;border-bottom:1px dashed var(--linha)"><div class="premio" style="border:0;padding:0"><span><b>'+esc(b.jogo)+'</b> · '+dh(b.data,1)+'</span><b>'+rs(b.valor)+'</b></div>'+b.vencedores.map(function(v){return '<div class="premio" style="border:0;padding:2px 0 0 10px"><span class="suave">'+esc(v.nome)+'</span><span class="suave">'+rs(v.valor)+'</span></div>'}).join('')+'</div>'}).join('')+'</div>';
+  $('#s-premios').innerHTML=h;
+}
+
+/* ===== meu palpitaço ===== */
+function telaLogin(m){
+  $('#s-meu').innerHTML='<div class="bloco"><h3 style="margin-top:0">Entrar no Palpitaço</h3><p class="suave" style="margin:0">Use seu CPF e o código de validação que você recebeu na inscrição. Ainda não participa? Fale com a diretoria para se inscrever. Sua anuidade fica na <a href="#" id="lp-socio">Área do sócio</a>.</p>'+(m?erro(m):'')+
+  '<form id="lp-form" action="#" method="post" autocomplete="on">'+
+  '<label for="lp-cpf">CPF</label><input id="lp-cpf" name="username" type="text" inputmode="numeric" autocomplete="username" placeholder="000.000.000-00">'+
+  '<label for="lp-cod">Código de validação</label><input id="lp-cod" name="password" type="password" inputmode="numeric" autocomplete="current-password">'+
+  caixaManter('lp-man')+'<p><button class="btn larg" id="lp-ok" type="submit">Entrar</button></p></form><div id="lp-msg"></div></div>';
+  mascaraCpf($('#lp-cpf'));var ls=$('#lp-socio');if(ls)ls.onclick=function(e){e.preventDefault();area('socio')};
+  $('#lp-form').onsubmit=function(ev){ev.preventDefault();var b=$('#lp-ok');b.disabled=true;$('#lp-msg').innerHTML='';
+    var man=$('#lp-man').checked;
+    run('loginPalpitaco',$('#lp-cpf').value,$('#lp-cod').value,man).then(function(r){TOKEN=r.token;AREA=r.area;if(man)Mem.set('cs_tk_p',r.token);else Mem.del('cs_tk_p');minha();classif()}).catch(function(e){$('#lp-msg').innerHTML=erro(e);b.disabled=false})};
+}
+function recarregarArea(){return run('minhaArea',TOKEN).then(function(a){AREA=a;minha()}).catch(function(e){if(e==='SESSAO_EXPIRADA'){Mem.del('cs_tk_p');TOKEN=null;AREA=null;telaLogin('Sua sessão expirou. Entre de novo.')}else $('#s-meu').insertAdjacentHTML('afterbegin',erro(e))})}
+function minha(){
+  var a=AREA;TIMERS=TIMERS.filter(function(f){return !f.area});
+  var h='<div class="bloco"><div style="display:flex;justify-content:space-between;gap:10px;align-items:start"><div><div style="font:800 1.4rem/1.1 var(--disp)">'+esc(a.nome)+'</div><span class="div-tag '+divCls(a.divisao)+'">'+esc(a.divisao)+'</span></div><button class="btn sec" id="sair" style="padding:6px 12px">Sair</button></div>'+
+  '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px"><div><div class="suave">Geral</div><div style="font:800 1.6rem var(--disp)">'+(a.posGeral||'–')+'º <small style="font-size:1rem">de '+a.totalGeral+'</small></div><div class="suave">'+pts(a.bra)+' pts</div></div>'+
+  '<div><div class="suave">Divisão</div><div style="font:800 1.6rem var(--disp)">'+(a.posDivisao||'–')+'º <small style="font-size:1rem">de '+a.totalDivisao+'</small></div><div class="suave">'+pts(a.copas)+' pts</div></div></div></div>';
+  h+='<h2>Jogos abertos</h2>';
+  if(!a.abertos.length)h+='<div class="bloco">Nenhum jogo aberto agora. Volte quando o próximo jogo for cadastrado.</div>';
+  a.abertos.forEach(function(j,i){h+=formPalpite(j,i)});
+  h+='<h2>Meus palpites</h2>';
+  h+=a.historico.length?'<div class="bloco">'+a.historico.map(function(x){var p=x.palpite,j=x.jogo;
+    var v={MANDANTE:esc(j.mandante),EMPATE:'Empate',VISITANTE:esc(j.visitante)}[p.vence]||p.vence;
+    return '<div class="linha-hist"'+(x.pontos?' role="button" tabindex="0" style="cursor:pointer" data-hist':'')+'><div><b>'+nomeJogo(j)+'</b>'+(j.status==='FINALIZADO'?' <span class="suave">'+j.gm+' x '+j.gv+'</span>':'')+'<span class="desemp">'+dh(j.data,1)+' · '+(p.pm!==''&&p.pm!=null?p.pm+'x'+p.pv:v)+' · Ambos: '+esc(p.ambos)+(p.jogadores?' · '+esc(p.jogadores.split(';').map(function(x){return x.split(' - ').pop()}).join(', ')):'')+'</span></div><div style="text-align:right;white-space:nowrap">'+(x.pontos?'<b style="font:700 1.2rem var(--disp)">'+pts(x.pontos.bra)+'</b><span class="desemp">divisão '+pts(x.pontos.copas)+'</span>':'<span class="suave">aguardando</span>')+'</div></div>'+(x.pontos?'<div class="det-hist" hidden style="padding:0 0 10px">'+partesHtml(x.pontos.partes)+'</div>':'')}).join('')+'</div>':'<div class="bloco">Você ainda não tem palpites nesta temporada.</div>';
+  $('#s-meu').innerHTML=h;
+  $('#sair').onclick=function(){run('sairSessao',TOKEN);Mem.del('cs_tk_p');TOKEN=null;AREA=null;telaLogin();classif()};
+  document.querySelectorAll('[data-hist]').forEach(function(d){d.onclick=function(){var x=d.nextElementSibling;x.hidden=!x.hidden}});
+  a.abertos.forEach(function(j,i){ligarForm(j,i)});
+}
+function formPalpite(j,i){
+  var m=j.meu, el=AREA.elenco, max=AREA.maxJogadores, sel=m&&m.jogadores?m.jogadores.split(';'):[];
+  var opc=function(v){return '<option value="">—</option>'+el.map(function(x){return '<option'+(x===v?' selected':'')+'>'+esc(x)+'</option>'}).join('')};
+  var temPl=m&&m.pm!==''&&m.pm!=null;
+  return '<div class="bloco" id="f'+i+'"><div style="font:800 1.4rem/1.1 var(--disp)">'+nomeJogo(j)+'</div><div class="suave">'+esc(j.campeonato||'')+' · '+dh(j.data)+' · fecha em <span id="cd'+i+'"></span></div>'+
+  (m?'<div class="msg ok">Seu palpite atual: '+(temPl?m.pm+'x'+m.pv:{MANDANTE:esc(j.mandante),EMPATE:'Empate',VISITANTE:esc(j.visitante)}[m.vence])+' · Ambos: '+esc(m.ambos)+'. Enviar de novo substitui este.</div>':'')+
+  '<label>Quem vence?</label><div class="opcoes" data-g="vence">'+[['MANDANTE',j.mandante],['EMPATE','Empate'],['VISITANTE',j.visitante]].map(function(o){return '<button type="button" class="op" data-v="'+o[0]+'" aria-pressed="'+(m&&m.vence===o[0])+'">'+esc(o[1])+'</button>'}).join('')+'</div>'+
+  '<label>Ambos marcam?</label><div class="opcoes duas" data-g="ambos">'+['SIM','NÃO'].map(function(o){return '<button type="button" class="op" data-v="'+o+'" aria-pressed="'+(m&&m.ambos===o)+'">'+(o==='SIM'?'Sim':'Não')+'</button>'}).join('')+'</div>'+
+  '<label>Placar exato <span class="suave" style="font-weight:400">(opcional · acerto +5, erro −1 no geral)</span></label><div class="placar"><input type="number" min="0" max="20" inputmode="numeric" class="pm" value="'+(temPl?m.pm:'')+'" aria-label="Gols '+esc(j.mandante)+'"><b>x</b><input type="number" min="0" max="20" inputmode="numeric" class="pv" value="'+(temPl?m.pv:'')+'" aria-label="Gols '+esc(j.visitante)+'"></div>'+
+  '<label>Quem marca pelo Grêmio? <span class="suave" style="font-weight:400">(opcional · até '+max+')</span></label>'+
+  Array.apply(null,Array(max)).map(function(_,k){return '<select class="jg" style="margin-bottom:6px" aria-label="Jogador '+(k+1)+'">'+opc(sel[k]||'')+'</select>'}).join('')+
+  '<p><button class="btn larg env">'+(m?'Atualizar palpite':'Enviar palpite')+'</button></p><div class="ret"></div></div>';
+}
+function ligarForm(j,i){
+  var f=$('#f'+i);
+  var marcar=function(g,v){f.querySelectorAll('[data-g="'+g+'"] .op').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.v===v)})};
+  f.querySelectorAll('.op').forEach(function(b){b.onclick=function(){marcar(b.parentNode.dataset.g,b.dataset.v)}});
+  var sinc=function(){var a=f.querySelector('.pm').value,b=f.querySelector('.pv').value,tem=a!==''&&b!=='';
+    f.querySelectorAll('.op').forEach(function(x){x.disabled=tem});
+    if(tem){a=+a;b=+b;marcar('vence',a>b?'MANDANTE':a<b?'VISITANTE':'EMPATE');marcar('ambos',a>0&&b>0?'SIM':'NÃO')}};
+  f.querySelector('.pm').oninput=sinc;f.querySelector('.pv').oninput=sinc;sinc();
+  var t=function(){var r=falta(j.prazo),el=$('#cd'+i);if(el)el.textContent=r?(r.d?r.d+'d ':'')+r.h+'h '+r.m+'min':'encerrado'};t.area=1;TIMERS.push(t);t();
+  f.querySelector('.env').onclick=function(){var btn=this,ret=f.querySelector('.ret');ret.innerHTML='';
+    var g=function(n){var x=f.querySelector('[data-g="'+n+'"] [aria-pressed="true"]');return x?x.dataset.v:''};
+    var pal={vence:g('vence'),ambos:g('ambos'),pm:f.querySelector('.pm').value,pv:f.querySelector('.pv').value,
+      jogadores:[].map.call(f.querySelectorAll('.jg'),function(s){return s.value}).filter(String)};
+    if(!pal.vence&&pal.pm===''){ret.innerHTML=erro('Escolha quem vence ou informe o placar.');return}
+    if(!pal.ambos&&pal.pm===''){ret.innerHTML=erro('Responda se ambos marcam.');return}
+    if((pal.pm==='')!==(pal.pv==='')){ret.innerHTML=erro('Preencha os dois lados do placar ou deixe os dois vazios.');return}
+    btn.disabled=true;
+    run('enviarPalpite',TOKEN,j.id,pal).then(function(r){
+      ret.innerHTML='<div class="bloco recibo" role="status"><b>Palpite registrado às '+dh(r.quando).split(' ').pop()+'</b><div class="suave">'+esc(r.jogo)+' · '+(r.placar||{MANDANTE:'Mandante',EMPATE:'Empate',VISITANTE:'Visitante'}[r.vence])+' · Ambos: '+esc(r.ambos)+(r.jogadores.length?' · '+esc(r.jogadores.map(function(x){return x.split(' - ').pop()}).join(', ')):'')+'</div><div class="suave">Vale o último palpite enviado até 1 minuto antes do jogo.</div></div>';
+      btn.disabled=false;btn.textContent='Atualizar palpite';
+      setTimeout(recarregarArea,2500);
+    }).catch(function(e){if(e==='SESSAO_EXPIRADA'){Mem.del('cs_tk_p');TOKEN=null;AREA=null;telaLogin('Sua sessão expirou. Entre de novo e reenvie o palpite.');return}ret.innerHTML=erro(e);btn.disabled=false})};
+}
+
+/* ===== anuidade ===== */
+/* data de nascimento digitada: 19121994 vira 19/12/1994 */
+function mascaraData(el){el.addEventListener('input',function(){var d=el.value.replace(/\D/g,'').slice(0,8),o=d.slice(0,2);if(d.length>2)o+='/'+d.slice(2,4);if(d.length>4)o+='/'+d.slice(4);el.value=o})}
+function dataNasc(v){var m=String(v||'').match(/^(\d{2})\/(\d{2})\/(\d{4})$/);if(!m)return '';var d=+m[1],mm=+m[2],a=+m[3],t=new Date(a,mm-1,d);
+  if(t.getFullYear()!==a||t.getMonth()!==mm-1||t.getDate()!==d||a<1900||t>new Date())return '';return m[1]+'/'+m[2]+'/'+m[3]}
+function telaAnuidade(m){
+  $('#anu').innerHTML='<div class="bloco"><p class="suave" style="margin-top:0">Consulte anuidades, inscrição do Palpitaço e eventos com CPF e data de nascimento.</p>'+(m?erro(m):'')+
+  '<form id="an-form" action="#" method="post" autocomplete="on">'+
+  '<label for="an-cpf">CPF</label><input id="an-cpf" name="username" type="text" inputmode="numeric" autocomplete="username" placeholder="000.000.000-00">'+
+  '<label for="an-nasc">Data de nascimento</label><input id="an-nasc" name="bday" type="text" inputmode="numeric" autocomplete="bday" placeholder="dd/mm/aaaa" maxlength="10">'+
+  caixaManter('an-man')+'<p><button class="btn larg" id="an-ok" type="submit">Consultar</button></p></form><div id="an-msg"></div></div>';
+  mascaraCpf($('#an-cpf'));mascaraData($('#an-nasc'));
+  $('#an-form').onsubmit=function(ev){ev.preventDefault();var b=$('#an-ok');b.disabled=true;$('#an-msg').innerHTML='';
+    var man=$('#an-man').checked;
+    var dn=dataNasc($('#an-nasc').value);if(!dn){$('#an-msg').innerHTML=erro('Data inválida. Digite dia, mês e ano, ex.: 19121994.');b.disabled=false;return}
+    run('loginAnuidade',$('#an-cpf').value,dn,man).then(function(r){TK_A=r.token;if(man)Mem.set('cs_tk_a',r.token);else Mem.del('cs_tk_a');mostraAnuidade(r)}).catch(function(e){$('#an-msg').innerHTML=erro(e);b.disabled=false})};
+}
+function mostraAnuidade(r){
+  var emDia=r.aberto<0.01;
+  // cobrança com saldo: valor (negrito), pago (cinza), falta (vermelho); quitada: uma linha só
+  var item=function(x,rot){
+    var r2=rot?'<div class="rot">'+esc(rot)+'</div>':'';
+    if(x.saldo<0.01)return '<div class="it"><div><span class="v">'+rs(x.valor)+'</span> <span class="pg">· pago'+(x.data?' em '+x.data:'')+'</span></div>'+r2+'</div>';
+    return '<div class="it"><div class="v">'+rs(x.valor)+'</div><div class="pg">pago '+rs(x.pago)+'</div><div class="falta">Falta '+rs(x.saldo)+'</div>'+r2+'</div>'};
+  var h='<div class="bloco"><div style="font:800 1.4rem/1.1 var(--disp)">'+esc(r.nome)+'</div>'+
+  '<div class="msg '+(emDia?'ok':'erro')+'">'+(emDia?'Tudo em dia.':'Em aberto: <b>'+rs(r.aberto)+'</b>')+'</div>'+
+  '<div class="sit">'+
+  '<div class="sit-cab"><span>Ano</span><span>Anuidade</span><span>Palpitaço e outros</span><span>Total</span></div>'+
+  r.anos.map(function(a){
+    var an=a.anuidade?item(a.anuidade,a.anuidade.obs&&/j[oó]ia/i.test(a.anuidade.obs)?'anuidade + jóia':''):'<span class="pg">—</span>';
+    var out=a.outros.length?a.outros.map(function(o){return item(o,String(o.tipo).toUpperCase()==='EVENTO'?o.descricao:'')}).join(''):'<span class="pg">—</span>';
+    var tot=a.aberto>0.009?'<div class="falta tot">'+rs(a.aberto)+'</div><div class="pg">em aberto</div>':'<div class="emdia">Em dia</div>';
+    return '<div class="sit-lin"><span class="ano">'+a.ano+'</span><div>'+an+'</div><div>'+out+'</div><div class="t">'+tot+'</div></div>'}).join('')+
+  '</div></div>';
+  if(!emDia)h+='<div class="bloco"><h3 style="margin-top:0">Como pagar</h3><p style="margin:0 0 6px">PIX (e-mail):</p><div style="display:flex;gap:8px"><input type="text" readonly value="'+esc(r.pix)+'" id="pix"><button class="btn" id="cp">Copiar</button></div>'+
+    '<p class="suave">A anuidade vence na 1ª reunião do ano (março). Depois de pagar, envie o comprovante pelo WhatsApp: a baixa é feita pela diretoria.</p><a class="btn sec larg" target="_blank" rel="noopener" href="https://wa.me/'+esc(r.whatsapp)+'?text='+encodeURIComponent('Olá! Segue o comprovante de pagamento de '+r.nome+'.')+'">Enviar comprovante</a></div>';
+  h+='<p><button class="btn sec larg" id="an-volta">Sair</button></p>';
+  $('#anu').innerHTML=h;
+  var cp=$('#cp');if(cp)cp.onclick=function(){var i=$('#pix');i.select();try{navigator.clipboard.writeText(i.value)}catch(e){document.execCommand('copy')}cp.textContent='Copiado'};
+  $('#an-volta').onclick=function(){if(TK_A)run('sairSessao',TK_A);Mem.del('cs_tk_a');TK_A=null;telaAnuidade()};
+}
+
+function mascaraCpf(i){i.oninput=function(){var d=i.value.replace(/\D/g,'').slice(0,11),o=d;
+  if(d.length>9)o=d.slice(0,3)+'.'+d.slice(3,6)+'.'+d.slice(6,9)+'-'+d.slice(9);else if(d.length>6)o=d.slice(0,3)+'.'+d.slice(3,6)+'.'+d.slice(6);else if(d.length>3)o=d.slice(0,3)+'.'+d.slice(3);i.value=o}}
+
+/* ===== regulamento ===== */
+function regras(){
+  var P=PUB.pesos,B=P.BRA,C=P.COPAS,v=function(n){return (n>0?'+':'')+pts(n)};
+  var linhas=[['Quem vence','VENCE'],['Ambos marcam','AMBOS'],['Placar exato','PLACAR_ACERTO'],['Placar errado','PLACAR_ERRO'],['1 gol acertado','GOL_ACERTO_1'],['2 gols acertados','GOL_ACERTO_2'],['3 gols acertados','GOL_ACERTO_3'],['4 gols acertados','GOL_ACERTO_4'],['1 jogador errado','GOL_ERRO_1'],['2 jogadores errados','GOL_ERRO_2'],['3 jogadores errados','GOL_ERRO_3'],['4 jogadores errados','GOL_ERRO_4']];
+  $('#regras').innerHTML='<h2>Regulamento do Palpitaço '+PUB.ano+'</h2>'+
+  '<div class="bloco"><h3 style="margin-top:0">Quem participa</h3><p>Só sócios do Consulado. A inscrição custa '+rs(PUB.valorInscricao)+' por ano e vale para todos os jogos da temporada. Quem entra pela primeira vez começa na Série B.</p>'+
+  '<h3>Quais jogos valem</h3><p>Todos os jogos oficiais do Grêmio na temporada: Gauchão, Brasileirão, Copa do Brasil e competições sul-americanas. Amistosos não valem.</p>'+
+  '<h3>Como palpitar</h3><ul><li>Entre em <b>Palpitaço › Meu palpitaço</b> com CPF e código de validação.</li><li>O palpite fecha <b>1 minuto antes</b> do início do jogo.</li><li>Pode palpitar quantas vezes quiser: vale o último envio antes do prazo.</li><li>Depois do prazo, os palpites de todos ficam visíveis na aba Último jogo.</li></ul></div>'+
+  '<div class="bloco"><h3 style="margin-top:0">Pontuação</h3><p>Cada palpite é pontuado de duas formas: o modo <b>Geral</b> (com penalidade por erro), usado na classificação geral, e o modo <b>Divisão</b> (sem penalidade), usado na classificação de cada divisão.</p>'+
+  '<div class="tab-wrap"><table><thead><tr><th>Item</th><th class="pts">Geral</th><th class="pts">Divisão</th></tr></thead><tbody>'+linhas.map(function(l){return '<tr><td>'+l[0]+'</td><td class="pts">'+v(B[l[1]])+'</td><td class="pts">'+v(C[l[1]])+'</td></tr>'}).join('')+'</tbody></table></div>'+
+  '<ul><li>Gols contam só os marcados pelo Grêmio nos 90 minutos, sem gol contra.</li><li>Cada gol do jogador escolhido conta um acerto (se ele fizer 2, são 2 acertos).</li><li>Jogador escolhido que não jogar ou não marcar conta como erro.</li><li>Escolher o mesmo jogador duas vezes conta erro para os dois.</li><li>Placar e jogadores são opcionais. Quem não arrisca não perde pontos.</li></ul></div>'+
+  '<div class="bloco"><h3 style="margin-top:0">Divisões</h3><p>As divisões são Libertadores, Copa do Brasil e Série B, com premiação própria. No fim da temporada, os <b>5 primeiros</b> da classificação geral vão para a Libertadores e os <b>4 últimos</b> para a Série B. Os demais ficam na Copa do Brasil.</p>'+
+  '<h3>Desempate</h3><p>Geral: 1) menos pontos perdidos; 2) mais placares exatos; 3) mais acertos de goleador; 4) mais acertos de quem vence; 5) mais jogos palpitados; 6) sorteio. Divisões: primeiro vale a maior pontuação do modo Geral (quem errou menos), depois os mesmos critérios.</p></div>'+
+  '<div class="bloco"><h3 style="margin-top:0">Premiação</h3><p>A premiação é calculada sobre o total de inscritos × '+rs(PUB.valorInscricao)+'. Até 10% desse valor forma um fundo de bônus, usado em jogos especiais para premiar o melhor palpite do jogo; se houver empate em todos os critérios, o bônus é dividido entre os empatados. O que sobrar do fundo soma na premiação final. Os valores são arredondados para múltiplos de R$ 10.</p><p>Quem é premiado no Geral e na divisão recebe os dois prêmios. Quem estiver devendo a inscrição tem o valor descontado do prêmio. Os valores atualizados estão em <b>Palpitaço › Prêmios</b>.</p></div>';
+}
+
+
+/* ===== TESOURARIA ===== */
+var TK_T=null,TP=null,TABA='rec',TBUSCA='',SEL={};
+function tesAbre(){if(TP){tesTela();return}
+  var tk=Mem.get('cs_tk_t');
+  if(tk){$('#tes').innerHTML='<div class="carregando">Abrindo…</div>';run('tesPainel',tk).then(function(p){TK_T=tk;TP=p;tesTela()}).catch(function(){Mem.del('cs_tk_t');tesLogin()})}
+  else tesLogin()}
+function tesLogin(m){$('#tes-pe').hidden=true;$('#t-selbar').hidden=true;SEL={};
+  $('#tes').innerHTML='<h2>Tesouraria</h2><div class="bloco"><p class="suave" style="margin:0">Acesso liberado pela diretoria para receber pagamentos e lançar despesas nas reuniões.</p>'+(m?erro(m):'')+
+  '<label for="tl-cpf">CPF</label><input type="text" id="tl-cpf" inputmode="numeric" autocomplete="username" placeholder="000.000.000-00">'+
+  '<label for="tl-s">Senha</label><input type="password" id="tl-s" autocomplete="current-password">'+caixaManter('tl-m')+
+  '<p style="margin:14px 0 0"><button class="btn larg" id="tl-ok">Entrar</button></p><div id="tl-msg"></div></div>';
+  mascaraCpf($('#tl-cpf'));
+  $('#tl-ok').onclick=function(){var b=this;b.disabled=true;$('#tl-msg').innerHTML='';
+    run('loginTesouraria',$('#tl-cpf').value,$('#tl-s').value,$('#tl-m').checked).then(function(r){TK_T=r.token;TP=r.painel;if($('#tl-m').checked)Mem.set('cs_tk_t',r.token);tesTela()})
+    .catch(function(e){b.disabled=false;$('#tl-msg').innerHTML=erro(e)})}}
+function tesErro(e){if(String(e).indexOf('SESSAO_EXPIRADA')>=0){Mem.del('cs_tk_t');TK_T=null;TP=null;tesLogin('Sua sessão terminou. Entre de novo.');return}
+  tesMsg(e,'erro')}
+function tesMsg(t,tipo){var el=$('#t-msg');if(!el)return;el.innerHTML='<div class="msg '+(tipo||'ok')+'" role="status">'+esc(t)+'</div>';if(tipo!=='erro')setTimeout(function(){if(el.firstChild)el.innerHTML=''},4000)}
+function tesHora(iso){return iso?new Date(iso).toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo',hour:'2-digit',minute:'2-digit'}):''}
+function tesCall(fn,args,depois){return run.apply(null,[fn,TK_T].concat(args)).then(function(p){TP=p;tesTela();if(p.msg)tesMsg(p.msg);if(depois)depois()})}
+function tesTela(){var p=TP,c=p.caixinha;
+  var cab='<div class="bloco" style="padding:10px 14px"><b>'+(c?esc(c.descricao):'Tesouraria')+'</b><div class="suave">Tesoureiro: '+esc(p.tesoureiro)+' · <a href="#" id="t-sair">Sair</a></div></div><div id="t-msg"></div>';
+  if(!c){$('#tes-pe').hidden=true;$('#t-selbar').hidden=true;SEL={};
+    var u=p.ultima;
+    $('#tes').innerHTML=cab+'<div class="bloco"><h3 style="margin-top:0">Abrir a caixinha da reunião</h3><p class="suave" style="margin:0">Abra no começo da reunião. Tudo o que você receber e pagar fica nela, e o saldo entra no caixa do Consulado.</p>'+
+      '<label for="ta-d">Reunião</label><input type="text" id="ta-d" value="'+esc(p.sugestao)+'"><p style="margin:12px 0 0"><button class="btn larg" id="ta-ok">Abrir caixinha</button></p></div>'+
+      (u?'<div class="bloco"><h3 style="margin-top:0">Última caixinha</h3><b>'+esc(u.descricao)+'</b><p class="suave" style="margin:2px 0 6px">'+(u.status==='CONFERIDA'?'Conferida pela diretoria':'Aguardando conferência da diretoria')+'</p><div class="premio"><span>Recebido</span><b class="pos">'+rs(u.totais.recebido)+'</b></div><div class="premio"><span>Pago</span><b class="neg">'+rs(u.totais.pago)+'</b></div><div class="premio"><span>Saldo</span><b>'+rs(u.totais.saldo)+'</b></div><div class="premio"><span>Em dinheiro · PIX</span><span>'+rs(u.totais.dinheiro)+' · '+rs(u.totais.pix)+'</span></div></div>':'');
+    $('#ta-ok').onclick=function(){var b=this;b.disabled=true;tesCall('tesAbrir',[$('#ta-d').value]).catch(function(e){b.disabled=false;tesErro(e)})};
+    ligaSair();return}
+  var t=c.totais,q=TBUSCA.toLowerCase();
+  var lista=p.receber.filter(function(r){return !q||r.nome.toLowerCase().indexOf(q)>=0||r.desc.toLowerCase().indexOf(q)>=0});
+  var movHtml=function(m){return '<div class="mov"><div class="n"><b>'+esc(m.socio?m.socio+' · '+m.desc:m.desc)+'</b><span>'+tesHora(m.quando)+' · '+(m.forma==='BANCO'?'PIX':'Dinheiro')+(m.baixa?' · baixa feita':'')+(m.conciliado?'':' · <a href="#" data-u="'+esc(m.id)+'">desfazer</a>')+'</span></div><div class="v '+(m.valor<0?'neg':'pos')+'">'+rs(m.valor)+'</div></div>'};
+  var des=c.mov.filter(function(m){return m.valor<0});
+  $('#tes').innerHTML=cab+
+  '<div class="t-kpis"><div class="t-kpi" style="--c:var(--ok)"><small>Recebido</small><b>'+rs(t.recebido)+'</b></div><div class="t-kpi" style="--c:var(--erro)"><small>Pago</small><b>'+rs(t.pago)+'</b></div><div class="t-kpi"><small>Saldo</small><b>'+rs(t.saldo)+'</b></div></div>'+
+  '<div class="t-abas"><button data-ta="rec" aria-pressed="'+(TABA==='rec')+'">A receber</button><button data-ta="des" aria-pressed="'+(TABA==='des')+'">Despesas</button><button data-ta="mov" aria-pressed="'+(TABA==='mov')+'">Movimentos</button></div>'+
+  '<div class="bloco"'+(TABA==='rec'?'':' hidden')+'><input type="text" id="t-busca" placeholder="Buscar sócio" value="'+esc(TBUSCA)+'" style="margin-bottom:6px"><div id="t-lista">'+tesListaHtml(lista,q)+'</div></div>'+
+  '<div class="bloco"'+(TABA==='des'?'':' hidden')+'><p class="suave" style="margin-top:0">Lance aqui o que for pago na reunião: mercado, chopp, carne, gás…</p><button class="btn sec larg" id="t-desp" type="button">+ Lançar despesa</button><div style="margin-top:8px">'+(des.length?des.slice().reverse().map(movHtml).join(''):'<p class="suave">Nenhuma despesa ainda.</p>')+'</div></div>'+
+  '<div class="bloco"'+(TABA==='mov'?'':' hidden')+'>'+(c.mov.length?c.mov.slice().reverse().map(movHtml).join(''):'<p class="suave">Nada lançado ainda.</p>')+
+    '<p class="suave" style="margin:8px 0 0;font-size:.88rem">Em dinheiro: <b>'+rs(t.dinheiro)+'</b> · PIX: <b>'+rs(t.pix)+'</b></p></div><div style="height:130px"></div>';
+  $('#tes-pe').hidden=false;
+  document.querySelectorAll('[data-ta]').forEach(function(b){b.onclick=function(){TABA=b.dataset.ta;tesTela()}});
+  var bu=$('#t-busca');bu.oninput=function(){TBUSCA=bu.value;var q=TBUSCA.toLowerCase();$('#t-lista').innerHTML=tesListaHtml(p.receber.filter(function(r){return !q||r.nome.toLowerCase().indexOf(q)>=0||r.desc.toLowerCase().indexOf(q)>=0}),q);tesLigaLista()};
+  tesLigaLista();
+  document.querySelectorAll('[data-u]').forEach(function(a){a.onclick=function(e){e.preventDefault();var m=c.mov.filter(function(x){return x.id===a.dataset.u})[0];
+    tdlg('Desfazer lançamento','<p>'+esc(m.socio?m.socio+' · '+m.desc:m.desc)+' · <b>'+rs(m.valor)+'</b></p>'+(m.baixa?'<p class="suave">O valor volta a ficar em aberto na cobrança do sócio.</p>':''),'Desfazer',function(){return tesCall('tesDesfazer',[m.id])})}});
+  $('#t-desp').onclick=tesDespesaDlg;$('#tp-av').onclick=tesAvulsoDlg;$('#tp-enc').onclick=tesEncerrarDlg;
+  ligaSair()}
+function ligaSair(){$('#t-sair').onclick=function(e){e.preventDefault();if(TK_T)run('sairSessao',TK_T);Mem.del('cs_tk_t');TK_T=null;TP=null;tesLogin()}}
+/* janela de confirmação da tesouraria: fn devolve Promise, ou false para não fechar */
+function tdlg(t,html,okTxt,fn){var d=$('#tdlg');$('#tdlg-t').textContent=t;$('#tdlg-c').innerHTML='<div id="tdlg-m"></div>'+html;var ok=$('#tdlg-ok');ok.textContent=okTxt;ok.disabled=false;
+  d.querySelectorAll('.seg2 button').forEach(function(b){b.onclick=function(){b.parentNode.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b)})}});
+  $('#tdlg-x').onclick=function(){d.close()};
+  ok.onclick=function(){var r=fn();if(r===false)return;ok.disabled=true;Promise.resolve(r).then(function(){d.close()}).catch(function(e){ok.disabled=false;if(String(e).indexOf('SESSAO_EXPIRADA')>=0){d.close();tesErro(e)}else $('#tdlg-m').innerHTML=erro(e)})};
+  if(d.showModal)d.showModal();else d.setAttribute('open','')}
+function tFormaHtml(){return '<label>Forma</label><div class="seg2" id="tf"><button type="button" data-f="DINHEIRO" aria-pressed="false">Dinheiro</button><button type="button" data-f="PIX" aria-pressed="false">PIX</button></div>'}
+function tForma(){var b=document.querySelector('#tf button[aria-pressed="true"]');return b?b.dataset.f:''}
+function tFalta(m){$('#tdlg-m').innerHTML=erro(m);return false}
+function tValor(id){return parseFloat(String($(id).value).replace(',','.'))||0}
+function chave(r){return r.tipo+'#'+r.ref}
+/* lista agrupada por sócio: total de cada um, marcar tudo, marcar item a item */
+function tesListaHtml(lista,q){if(!lista.length)return '<p class="suave">Nada em aberto'+(q?' para essa busca':'')+'.</p>';
+  var g={},ord=[];lista.forEach(function(r){if(!g[r.nome]){g[r.nome]=[];ord.push(r.nome)}g[r.nome].push(r)});
+  var tf=lista.reduce(function(t,r){return t+r.falta},0);
+  return (q?'<div class="premio" style="margin-bottom:4px"><span>Total em aberto nesta busca</span><b>'+rs(tf)+'</b></div>':'')+ord.map(function(n,gi){var it=g[n],tot=it.reduce(function(t,r){return t+r.falta},0),todos=it.every(function(r){return SEL[chave(r)]});
+    return '<div class="grupo"><div class="grupo-cab"><b>'+esc(n)+'</b><span class="tot">'+rs(tot)+'</span><button type="button" data-g="'+gi+'">'+(todos?'Desmarcar':'Marcar tudo')+'</button></div>'+
+    it.map(function(r){var k=chave(r);return '<label class="item'+(SEL[k]?' sel':'')+'"><input type="checkbox" data-k="'+esc(k)+'"'+(SEL[k]?' checked':'')+'><span class="d"><b>'+esc(r.desc)+'</b>'+(r.palp?'<span class="ttag">PALPITAÇO</span>':'')+'</span><span class="fv">'+rs(r.falta)+'</span></label>'}).join('')+'</div>'}).join('')}
+function tesSel(){var p=TP,itens=p&&p.caixinha?p.receber.filter(function(r){return SEL[chave(r)]}):[];
+  Object.keys(SEL).forEach(function(k){if(!itens.some(function(r){return chave(r)===k}))delete SEL[k]});return itens}
+function tesBarra(){var it=tesSel(),bar=$('#t-selbar');bar.hidden=!it.length||TABA!=='rec';
+  $('#ts-n').textContent=it.length+(it.length>1?' itens':' item')+(new Set(it.map(function(r){return r.nome})).size>1?' · '+new Set(it.map(function(r){return r.nome})).size+' sócios':'');
+  $('#ts-v').textContent=rs(it.reduce(function(t,r){return t+r.falta},0))}
+function tesLigaLista(){var p=TP,q=TBUSCA.toLowerCase();
+  var lista=p.receber.filter(function(r){return !q||r.nome.toLowerCase().indexOf(q)>=0||r.desc.toLowerCase().indexOf(q)>=0});
+  var g={},ord=[];lista.forEach(function(r){if(!g[r.nome]){g[r.nome]=[];ord.push(r.nome)}g[r.nome].push(r)});
+  document.querySelectorAll('#t-lista [data-k]').forEach(function(c){c.onchange=function(){if(c.checked)SEL[c.dataset.k]=1;else delete SEL[c.dataset.k];$('#t-lista').innerHTML=tesListaHtml(lista,q);tesLigaLista()}});
+  document.querySelectorAll('#t-lista [data-g]').forEach(function(b){b.onclick=function(){var it=g[ord[+b.dataset.g]],todos=it.every(function(r){return SEL[chave(r)]});
+    it.forEach(function(r){if(todos)delete SEL[chave(r)];else SEL[chave(r)]=1});$('#t-lista').innerHTML=tesListaHtml(lista,q);tesLigaLista()}});
+  $('#ts-limpa').onclick=function(){SEL={};tesTela()};$('#ts-ok').onclick=tesReceberDlg;tesBarra()}
+/* recebe os itens marcados: total, divisão entre dinheiro e PIX */
+function tesReceberDlg(){var c=TP.caixinha,it=tesSel();if(!it.length)return;var tot=Math.round(it.reduce(function(t,r){return t+r.falta},0)*100)/100;
+  var nomes=[];it.forEach(function(r){if(nomes.indexOf(r.nome)<0)nomes.push(r.nome)});
+  tdlg('Receber de '+nomes.join(', '),'<div style="margin-top:8px">'+it.map(function(r){return '<div class="premio"><span>'+(nomes.length>1?esc(r.nome)+' · ':'')+esc(r.desc)+'</span><span>'+rs(r.falta)+'</span></div>'}).join('')+'</div>'+
+    '<div class="tot-dlg"><span>Total</span><b>'+rs(tot)+'</b></div>'+
+    '<div class="divide"><div><label for="tr-d">Dinheiro</label><input type="number" id="tr-d" inputmode="decimal" step="0.01" placeholder="0,00"></div><div><label for="tr-p">PIX</label><input type="number" id="tr-p" inputmode="decimal" step="0.01" placeholder="0,00"></div></div>'+
+    '<div class="atalhos"><button type="button" id="tr-td">Tudo em dinheiro</button><button type="button" id="tr-tp">Tudo em PIX</button></div>'+
+    '<p class="suave" id="tr-res" style="font-size:.88rem;margin:8px 0 0">Para dividir, digite o valor de um: o outro completa sozinho.</p>','Confirmar',function(){
+    var d=tValor('#tr-d'),x=tValor('#tr-p');if(d<0||x<0||!(d+x>0))return tFalta('Informe quanto foi pago em dinheiro e/ou PIX.');
+    if(d+x>tot+0.009)return tFalta('O valor passa do total. Dê o troco e informe só o que fica.');
+    return tesCall('tesReceberVarios',[{caixinha:c.id,itens:it.map(function(r){return {tipo:r.tipo,ref:r.ref}}),dinheiro:d,pix:x}]).then(function(){SEL={};tesTela();if(TP.msg)tesMsg(TP.msg)})});
+  var D=$('#tr-d'),P=$('#tr-p'),f2=function(v){return (Math.round(v*100)/100).toFixed(2)};
+  var res=function(){var d=tValor('#tr-d'),x=tValor('#tr-p'),s=d+x,fal=tot-s;$('#tr-res').innerHTML=s>0?'Recebendo <b>'+rs(s)+'</b>'+(fal>0.009?' · fica em aberto <b class="neg">'+rs(fal)+'</b>':fal<-0.009?' · <b class="neg">passa do total</b>':' · quita tudo'):'Para dividir, digite o valor de um: o outro completa sozinho.'};
+  D.oninput=function(){var d=tValor('#tr-d');P.value=d<=tot?f2(tot-d):'';res()};P.oninput=function(){var x=tValor('#tr-p');D.value=x<=tot?f2(tot-x):'';res()};
+  $('#tr-td').onclick=function(){D.value=f2(tot);P.value='0.00';res()};$('#tr-tp').onclick=function(){P.value=f2(tot);D.value='0.00';res()}}
+function tesAvulsoDlg(){var c=TP.caixinha;
+  tdlg('Recebimento avulso','<label for="tv-d">De quem / do quê</label><input type="text" id="tv-d" placeholder="Ex.: visitante na janta, rifa"><label for="tv-v">Valor</label><input type="number" id="tv-v" inputmode="decimal" step="0.01">'+tFormaHtml(),'Confirmar',function(){
+    var v=tValor('#tv-v'),d=$('#tv-d').value.trim(),f=tForma();if(!d)return tFalta('Informe de quem ou do quê.');if(!v)return tFalta('Informe o valor.');if(!f)return tFalta('Escolha dinheiro ou PIX.');
+    return tesCall('tesReceber',[{caixinha:c.id,tipo:'AVULSO',desc:d,valor:v,forma:f}])})}
+function tesDespesaDlg(){var c=TP.caixinha;
+  tdlg('Lançar despesa','<label for="td-d">O que foi pago</label><input type="text" id="td-d" placeholder="Ex.: mercado, chopp, gás"><label for="td-v">Valor</label><input type="number" id="td-v" inputmode="decimal" step="0.01">'+tFormaHtml()+'<label for="td-f">Foto do comprovante (opcional)</label><input type="file" id="td-f" accept="image/*">','Confirmar',function(){
+    var v=tValor('#td-v'),d=$('#td-d').value.trim(),f=tForma(),arq=$('#td-f').files[0];if(!d)return tFalta('Informe o que foi pago.');if(!v)return tFalta('Informe o valor.');if(!f)return tFalta('Escolha dinheiro ou PIX.');
+    return (arq?tFoto(arq):Promise.resolve('')).then(function(foto){return tesCall('tesDespesa',[{caixinha:c.id,desc:d,valor:v,forma:f,foto:foto}])})})}
+/* reduz a foto para no máximo 1280 px em JPEG antes de enviar */
+function tFoto(arq){return new Promise(function(ok){var r=new FileReader();r.onload=function(){var img=new Image();img.onload=function(){var k=Math.min(1,1280/Math.max(img.width,img.height)),cv=document.createElement('canvas');cv.width=Math.round(img.width*k);cv.height=Math.round(img.height*k);cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);ok(cv.toDataURL('image/jpeg',.72))};img.onerror=function(){ok('')};img.src=r.result};r.onerror=function(){ok('')};r.readAsDataURL(arq)})}
+function tesEncerrarDlg(){var c=TP.caixinha,t=c.totais;
+  tdlg('Encerrar caixinha','<p style="margin:10px 0 4px">Recebido <b class="pos">'+rs(t.recebido)+'</b> · Pago <b class="neg">'+rs(t.pago)+'</b></p><p style="font:800 1.6rem var(--disp);margin:4px 0">Saldo '+rs(t.saldo)+'</p><p style="margin:0">Em dinheiro: <b>'+rs(t.dinheiro)+'</b> · PIX: <b>'+rs(t.pix)+'</b></p><p class="suave" style="font-size:.88rem">Entregue o dinheiro para a diretoria conferir. Depois de encerrar, não dá mais para lançar nesta caixinha.</p>','Encerrar',function(){
+    return tesCall('tesEncerrar',[c.id])})}
+/* volta para a aba em que a pessoa estava (F5) */
+(function(){var s=Mem.get('cs_sub'),d=Mem.get('cs_div'),ar=Mem.get('cs_area');
+  if(d)DIV=d;if(s&&document.querySelector('#t-palp .chip[data-sub="'+s+'"]'))sub(s);
+  area(ar==='socio'||ar==='palp'||ar==='tes'?ar:'home');})();
+telaAnuidade();
+(function(){var ta=Mem.get('cs_tk_a');if(ta){TK_A=ta;$('#anu').innerHTML='<div class="carregando">Abrindo…</div>';
+  run('consultaAnuidade',ta).then(mostraAnuidade).catch(function(){Mem.del('cs_tk_a');TK_A=null;telaAnuidade()})}})();
+carregar();
+</script>
+</body>
+</html>
