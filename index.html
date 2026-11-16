@@ -163,6 +163,18 @@ tr.detalhe td{background:#F7FAFC;padding:6px 8px 10px}
 #tes-pe{position:fixed;left:0;right:0;bottom:0;background:var(--branco);border-top:1px solid var(--linha);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;z-index:6}
 #tes-pe .btn{flex:1;padding:12px 8px}
 #tes-pe[hidden],.bloco[hidden]{display:none}
+.grupo{border-bottom:1px solid var(--linha);padding:10px 0}.grupo:last-child{border-bottom:0}
+.grupo-cab{display:flex;align-items:center;gap:8px}.grupo-cab b{flex:1;min-width:0;font-size:1.05rem}.grupo-cab .tot{font:800 1.15rem var(--disp);color:var(--erro);white-space:nowrap}
+.grupo-cab button{border:1px solid var(--azul);background:var(--branco);color:var(--azul);border-radius:8px;font:700 .9rem var(--disp);padding:7px 10px;cursor:pointer;white-space:nowrap}
+.item{display:flex;align-items:center;gap:10px;padding:8px 0 0 2px;cursor:pointer}.item input{width:24px;height:24px;flex:none;accent-color:var(--ok)}
+.item .d{flex:1;min-width:0;font-size:.92rem;color:var(--suave)}.item .d b{color:var(--texto);font-weight:600}.item .fv{font:700 1.05rem var(--disp);white-space:nowrap}
+.item.sel .d b{color:var(--ok)}
+#t-selbar{position:fixed;left:0;right:0;bottom:calc(66px + env(safe-area-inset-bottom));background:var(--ok);color:var(--branco);display:flex;align-items:center;gap:10px;padding:10px 14px;z-index:6}
+#t-selbar[hidden]{display:none}#t-selbar span{flex:1;font-weight:600}#t-selbar b{font:800 1.3rem var(--disp)}
+#t-selbar button{border:0;border-radius:8px;background:var(--branco);color:var(--ok);font:800 1.05rem var(--disp);padding:10px 14px;cursor:pointer}
+#t-selbar .lp{background:none;color:var(--branco);text-decoration:underline;font-weight:600;padding:10px 4px}
+.divide{display:grid;grid-template-columns:1fr 1fr;gap:8px}.atalhos{display:flex;gap:6px;margin-top:8px}.atalhos button{flex:1;border:1px solid var(--linha);background:var(--fundo);border-radius:8px;padding:8px;font:700 .9rem var(--disp);cursor:pointer}
+.tot-dlg{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--linha);margin-top:8px;padding-top:8px}.tot-dlg b{font:800 1.5rem var(--disp)}
 dialog#tdlg{border:0;border-radius:14px;padding:0;width:calc(100% - 24px);max-width:420px}dialog#tdlg::backdrop{background:rgba(0,0,0,.5)}
 #tdlg .cab{background:var(--preto);color:var(--branco);padding:12px 14px;font:800 1.15rem var(--disp);border-bottom:4px solid var(--azul)}#tdlg .corpo{padding:4px 14px 12px;max-height:70vh;overflow:auto}#tdlg .pe{display:flex;gap:8px;padding:0 14px 14px}#tdlg .pe .btn{flex:1}
 .link-tes{display:block;margin:18px auto 0;background:none;border:0;color:var(--suave);text-decoration:underline;font-size:.9rem;cursor:pointer}
@@ -237,6 +249,7 @@ dialog#tdlg{border:0;border-radius:14px;padding:0;width:calc(100% - 24px);max-wi
 
 </main>
 
+<div id="t-selbar" hidden><span id="ts-n"></span><b id="ts-v"></b><button class="lp" id="ts-limpa" type="button">Limpar</button><button id="ts-ok" type="button">Receber</button></div>
 <div id="tes-pe" hidden><button class="btn sec" id="tp-av" type="button">+ Receb. avulso</button><button class="btn" id="tp-enc" type="button">Encerrar caixinha</button></div>
 <dialog id="tdlg"><div class="cab" id="tdlg-t"></div><div class="corpo" id="tdlg-c"></div><div class="pe"><button class="btn sec" id="tdlg-x" type="button">Cancelar</button><button class="btn" id="tdlg-ok" type="button" style="background:var(--ok)">Confirmar</button></div></dialog>
 <nav class="abas" aria-label="Palpitaço" hidden>
@@ -271,7 +284,7 @@ function erro(m){return '<div class="msg erro" role="alert">'+esc(m)+'</div>'}
 document.querySelectorAll('nav.abas button').forEach(function(b){b.onclick=function(){abrir(b.dataset.t)}});
 /* áreas: tela inicial, Área do sócio e Palpitaço (o site lembra a última) */
 var AREA_NOME={socio:'Área do sócio',palp:'Palpitaço',tes:'Tesouraria'};
-function area(a){Mem.set('cs_area',a);var home=a==='home';$('#tes-pe').hidden=true;
+function area(a){Mem.set('cs_area',a);var home=a==='home';$('#tes-pe').hidden=true;$('#t-selbar').hidden=true;
   $('#barra').hidden=home;$('#barra-t').textContent=AREA_NOME[a]||'';document.querySelector('nav.abas').hidden=a!=='palp';
   if(home){document.querySelectorAll('.tela').forEach(function(s){s.classList.toggle('ativa',s.id==='t-home')});window.scrollTo(0,0);return}
   if(a==='socio'){document.querySelectorAll('.tela').forEach(function(s){s.classList.toggle('ativa',s.id==='t-anu')});window.scrollTo(0,0);return}
@@ -504,12 +517,12 @@ function regras(){
 
 
 /* ===== TESOURARIA ===== */
-var TK_T=null,TP=null,TABA='rec',TBUSCA='';
+var TK_T=null,TP=null,TABA='rec',TBUSCA='',SEL={};
 function tesAbre(){if(TP){tesTela();return}
   var tk=Mem.get('cs_tk_t');
   if(tk){$('#tes').innerHTML='<div class="carregando">Abrindo…</div>';run('tesPainel',tk).then(function(p){TK_T=tk;TP=p;tesTela()}).catch(function(){Mem.del('cs_tk_t');tesLogin()})}
   else tesLogin()}
-function tesLogin(m){$('#tes-pe').hidden=true;
+function tesLogin(m){$('#tes-pe').hidden=true;$('#t-selbar').hidden=true;SEL={};
   $('#tes').innerHTML='<h2>Tesouraria</h2><div class="bloco"><p class="suave" style="margin:0">Acesso liberado pela diretoria para receber pagamentos e lançar despesas nas reuniões.</p>'+(m?erro(m):'')+
   '<label for="tl-cpf">CPF</label><input type="text" id="tl-cpf" inputmode="numeric" autocomplete="username" placeholder="000.000.000-00">'+
   '<label for="tl-s">Senha</label><input type="password" id="tl-s" autocomplete="current-password">'+caixaManter('tl-m')+
@@ -525,7 +538,7 @@ function tesHora(iso){return iso?new Date(iso).toLocaleTimeString('pt-BR',{timeZ
 function tesCall(fn,args,depois){return run.apply(null,[fn,TK_T].concat(args)).then(function(p){TP=p;tesTela();if(p.msg)tesMsg(p.msg);if(depois)depois()})}
 function tesTela(){var p=TP,c=p.caixinha;
   var cab='<div class="bloco" style="padding:10px 14px"><b>'+(c?esc(c.descricao):'Tesouraria')+'</b><div class="suave">Tesoureiro: '+esc(p.tesoureiro)+' · <a href="#" id="t-sair">Sair</a></div></div><div id="t-msg"></div>';
-  if(!c){$('#tes-pe').hidden=true;
+  if(!c){$('#tes-pe').hidden=true;$('#t-selbar').hidden=true;SEL={};
     var u=p.ultima;
     $('#tes').innerHTML=cab+'<div class="bloco"><h3 style="margin-top:0">Abrir a caixinha da reunião</h3><p class="suave" style="margin:0">Abra no começo da reunião. Tudo o que você receber e pagar fica nela, e o saldo entra no caixa do Consulado.</p>'+
       '<label for="ta-d">Reunião</label><input type="text" id="ta-d" value="'+esc(p.sugestao)+'"><p style="margin:12px 0 0"><button class="btn larg" id="ta-ok">Abrir caixinha</button></p></div>'+
@@ -539,15 +552,14 @@ function tesTela(){var p=TP,c=p.caixinha;
   $('#tes').innerHTML=cab+
   '<div class="t-kpis"><div class="t-kpi" style="--c:var(--ok)"><small>Recebido</small><b>'+rs(t.recebido)+'</b></div><div class="t-kpi" style="--c:var(--erro)"><small>Pago</small><b>'+rs(t.pago)+'</b></div><div class="t-kpi"><small>Saldo</small><b>'+rs(t.saldo)+'</b></div></div>'+
   '<div class="t-abas"><button data-ta="rec" aria-pressed="'+(TABA==='rec')+'">A receber</button><button data-ta="des" aria-pressed="'+(TABA==='des')+'">Despesas</button><button data-ta="mov" aria-pressed="'+(TABA==='mov')+'">Movimentos</button></div>'+
-  '<div class="bloco"'+(TABA==='rec'?'':' hidden')+'><input type="text" id="t-busca" placeholder="Buscar sócio" value="'+esc(TBUSCA)+'" style="margin-bottom:6px"><div id="t-lista">'+
-    (lista.length?lista.map(function(r,i){return '<div class="pessoa"><div class="n"><b>'+esc(r.nome)+'</b><span>'+esc(r.desc)+(r.palp?'<span class="ttag">PALPITAÇO</span>':'')+'</span></div><div class="v">'+rs(r.falta)+'</div><button type="button" data-r="'+p.receber.indexOf(r)+'">Recebeu</button></div>'}).join(''):'<p class="suave">Nada em aberto'+(q?' para essa busca':'')+'.</p>')+'</div></div>'+
+  '<div class="bloco"'+(TABA==='rec'?'':' hidden')+'><input type="text" id="t-busca" placeholder="Buscar sócio" value="'+esc(TBUSCA)+'" style="margin-bottom:6px"><div id="t-lista">'+tesListaHtml(lista,q)+'</div></div>'+
   '<div class="bloco"'+(TABA==='des'?'':' hidden')+'><p class="suave" style="margin-top:0">Lance aqui o que for pago na reunião: mercado, chopp, carne, gás…</p><button class="btn sec larg" id="t-desp" type="button">+ Lançar despesa</button><div style="margin-top:8px">'+(des.length?des.slice().reverse().map(movHtml).join(''):'<p class="suave">Nenhuma despesa ainda.</p>')+'</div></div>'+
   '<div class="bloco"'+(TABA==='mov'?'':' hidden')+'>'+(c.mov.length?c.mov.slice().reverse().map(movHtml).join(''):'<p class="suave">Nada lançado ainda.</p>')+
-    '<p class="suave" style="margin:8px 0 0;font-size:.88rem">Em dinheiro: <b>'+rs(t.dinheiro)+'</b> · PIX: <b>'+rs(t.pix)+'</b></p></div><div style="height:70px"></div>';
+    '<p class="suave" style="margin:8px 0 0;font-size:.88rem">Em dinheiro: <b>'+rs(t.dinheiro)+'</b> · PIX: <b>'+rs(t.pix)+'</b></p></div><div style="height:130px"></div>';
   $('#tes-pe').hidden=false;
   document.querySelectorAll('[data-ta]').forEach(function(b){b.onclick=function(){TABA=b.dataset.ta;tesTela()}});
-  var bu=$('#t-busca');bu.oninput=function(){TBUSCA=bu.value;var pos=bu.selectionStart;tesTela();var n=$('#t-busca');n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}};
-  document.querySelectorAll('[data-r]').forEach(function(b){b.onclick=function(){tesReceberDlg(p.receber[+b.dataset.r])}});
+  var bu=$('#t-busca');bu.oninput=function(){TBUSCA=bu.value;var q=TBUSCA.toLowerCase();$('#t-lista').innerHTML=tesListaHtml(p.receber.filter(function(r){return !q||r.nome.toLowerCase().indexOf(q)>=0||r.desc.toLowerCase().indexOf(q)>=0}),q);tesLigaLista()};
+  tesLigaLista();
   document.querySelectorAll('[data-u]').forEach(function(a){a.onclick=function(e){e.preventDefault();var m=c.mov.filter(function(x){return x.id===a.dataset.u})[0];
     tdlg('Desfazer lançamento','<p>'+esc(m.socio?m.socio+' · '+m.desc:m.desc)+' · <b>'+rs(m.valor)+'</b></p>'+(m.baixa?'<p class="suave">O valor volta a ficar em aberto na cobrança do sócio.</p>':''),'Desfazer',function(){return tesCall('tesDesfazer',[m.id])})}});
   $('#t-desp').onclick=tesDespesaDlg;$('#tp-av').onclick=tesAvulsoDlg;$('#tp-enc').onclick=tesEncerrarDlg;
@@ -563,10 +575,41 @@ function tFormaHtml(){return '<label>Forma</label><div class="seg2" id="tf"><but
 function tForma(){var b=document.querySelector('#tf button[aria-pressed="true"]');return b?b.dataset.f:''}
 function tFalta(m){$('#tdlg-m').innerHTML=erro(m);return false}
 function tValor(id){return parseFloat(String($(id).value).replace(',','.'))||0}
-function tesReceberDlg(r){var c=TP.caixinha;
-  tdlg('Recebeu de '+r.nome,'<p class="suave" style="margin:8px 0 0">'+esc(r.desc)+' · em aberto '+rs(r.falta)+'</p><label for="tr-v">Valor recebido</label><input type="number" id="tr-v" inputmode="decimal" step="0.01" value="'+r.falta.toFixed(2)+'">'+tFormaHtml()+'<p class="suave" style="font-size:.85rem;margin:8px 0 0">A baixa é feita na hora na cobrança do sócio.</p>','Confirmar',function(){
-    var v=tValor('#tr-v'),f=tForma();if(!v)return tFalta('Informe o valor.');if(!f)return tFalta('Escolha dinheiro ou PIX.');
-    return tesCall('tesReceber',[{caixinha:c.id,tipo:r.tipo,ref:r.ref,valor:v,forma:f}])})}
+function chave(r){return r.tipo+'#'+r.ref}
+/* lista agrupada por sócio: total de cada um, marcar tudo, marcar item a item */
+function tesListaHtml(lista,q){if(!lista.length)return '<p class="suave">Nada em aberto'+(q?' para essa busca':'')+'.</p>';
+  var g={},ord=[];lista.forEach(function(r){if(!g[r.nome]){g[r.nome]=[];ord.push(r.nome)}g[r.nome].push(r)});
+  var tf=lista.reduce(function(t,r){return t+r.falta},0);
+  return (q?'<div class="premio" style="margin-bottom:4px"><span>Total em aberto nesta busca</span><b>'+rs(tf)+'</b></div>':'')+ord.map(function(n,gi){var it=g[n],tot=it.reduce(function(t,r){return t+r.falta},0),todos=it.every(function(r){return SEL[chave(r)]});
+    return '<div class="grupo"><div class="grupo-cab"><b>'+esc(n)+'</b><span class="tot">'+rs(tot)+'</span><button type="button" data-g="'+gi+'">'+(todos?'Desmarcar':'Marcar tudo')+'</button></div>'+
+    it.map(function(r){var k=chave(r);return '<label class="item'+(SEL[k]?' sel':'')+'"><input type="checkbox" data-k="'+esc(k)+'"'+(SEL[k]?' checked':'')+'><span class="d"><b>'+esc(r.desc)+'</b>'+(r.palp?'<span class="ttag">PALPITAÇO</span>':'')+'</span><span class="fv">'+rs(r.falta)+'</span></label>'}).join('')+'</div>'}).join('')}
+function tesSel(){var p=TP,itens=p&&p.caixinha?p.receber.filter(function(r){return SEL[chave(r)]}):[];
+  Object.keys(SEL).forEach(function(k){if(!itens.some(function(r){return chave(r)===k}))delete SEL[k]});return itens}
+function tesBarra(){var it=tesSel(),bar=$('#t-selbar');bar.hidden=!it.length||TABA!=='rec';
+  $('#ts-n').textContent=it.length+(it.length>1?' itens':' item')+(new Set(it.map(function(r){return r.nome})).size>1?' · '+new Set(it.map(function(r){return r.nome})).size+' sócios':'');
+  $('#ts-v').textContent=rs(it.reduce(function(t,r){return t+r.falta},0))}
+function tesLigaLista(){var p=TP,q=TBUSCA.toLowerCase();
+  var lista=p.receber.filter(function(r){return !q||r.nome.toLowerCase().indexOf(q)>=0||r.desc.toLowerCase().indexOf(q)>=0});
+  var g={},ord=[];lista.forEach(function(r){if(!g[r.nome]){g[r.nome]=[];ord.push(r.nome)}g[r.nome].push(r)});
+  document.querySelectorAll('#t-lista [data-k]').forEach(function(c){c.onchange=function(){if(c.checked)SEL[c.dataset.k]=1;else delete SEL[c.dataset.k];$('#t-lista').innerHTML=tesListaHtml(lista,q);tesLigaLista()}});
+  document.querySelectorAll('#t-lista [data-g]').forEach(function(b){b.onclick=function(){var it=g[ord[+b.dataset.g]],todos=it.every(function(r){return SEL[chave(r)]});
+    it.forEach(function(r){if(todos)delete SEL[chave(r)];else SEL[chave(r)]=1});$('#t-lista').innerHTML=tesListaHtml(lista,q);tesLigaLista()}});
+  $('#ts-limpa').onclick=function(){SEL={};tesTela()};$('#ts-ok').onclick=tesReceberDlg;tesBarra()}
+/* recebe os itens marcados: total, divisão entre dinheiro e PIX */
+function tesReceberDlg(){var c=TP.caixinha,it=tesSel();if(!it.length)return;var tot=Math.round(it.reduce(function(t,r){return t+r.falta},0)*100)/100;
+  var nomes=[];it.forEach(function(r){if(nomes.indexOf(r.nome)<0)nomes.push(r.nome)});
+  tdlg('Receber de '+nomes.join(', '),'<div style="margin-top:8px">'+it.map(function(r){return '<div class="premio"><span>'+(nomes.length>1?esc(r.nome)+' · ':'')+esc(r.desc)+'</span><span>'+rs(r.falta)+'</span></div>'}).join('')+'</div>'+
+    '<div class="tot-dlg"><span>Total</span><b>'+rs(tot)+'</b></div>'+
+    '<div class="divide"><div><label for="tr-d">Dinheiro</label><input type="number" id="tr-d" inputmode="decimal" step="0.01" placeholder="0,00"></div><div><label for="tr-p">PIX</label><input type="number" id="tr-p" inputmode="decimal" step="0.01" placeholder="0,00"></div></div>'+
+    '<div class="atalhos"><button type="button" id="tr-td">Tudo em dinheiro</button><button type="button" id="tr-tp">Tudo em PIX</button></div>'+
+    '<p class="suave" id="tr-res" style="font-size:.88rem;margin:8px 0 0">Para dividir, digite o valor de um: o outro completa sozinho.</p>','Confirmar',function(){
+    var d=tValor('#tr-d'),x=tValor('#tr-p');if(d<0||x<0||!(d+x>0))return tFalta('Informe quanto foi pago em dinheiro e/ou PIX.');
+    if(d+x>tot+0.009)return tFalta('O valor passa do total. Dê o troco e informe só o que fica.');
+    return tesCall('tesReceberVarios',[{caixinha:c.id,itens:it.map(function(r){return {tipo:r.tipo,ref:r.ref}}),dinheiro:d,pix:x}]).then(function(){SEL={};tesTela();if(TP.msg)tesMsg(TP.msg)})});
+  var D=$('#tr-d'),P=$('#tr-p'),f2=function(v){return (Math.round(v*100)/100).toFixed(2)};
+  var res=function(){var d=tValor('#tr-d'),x=tValor('#tr-p'),s=d+x,fal=tot-s;$('#tr-res').innerHTML=s>0?'Recebendo <b>'+rs(s)+'</b>'+(fal>0.009?' · fica em aberto <b class="neg">'+rs(fal)+'</b>':fal<-0.009?' · <b class="neg">passa do total</b>':' · quita tudo'):'Para dividir, digite o valor de um: o outro completa sozinho.'};
+  D.oninput=function(){var d=tValor('#tr-d');P.value=d<=tot?f2(tot-d):'';res()};P.oninput=function(){var x=tValor('#tr-p');D.value=x<=tot?f2(tot-x):'';res()};
+  $('#tr-td').onclick=function(){D.value=f2(tot);P.value='0.00';res()};$('#tr-tp').onclick=function(){P.value=f2(tot);D.value='0.00';res()}}
 function tesAvulsoDlg(){var c=TP.caixinha;
   tdlg('Recebimento avulso','<label for="tv-d">De quem / do quê</label><input type="text" id="tv-d" placeholder="Ex.: visitante na janta, rifa"><label for="tv-v">Valor</label><input type="number" id="tv-v" inputmode="decimal" step="0.01">'+tFormaHtml(),'Confirmar',function(){
     var v=tValor('#tv-v'),d=$('#tv-d').value.trim(),f=tForma();if(!d)return tFalta('Informe de quem ou do quê.');if(!v)return tFalta('Informe o valor.');if(!f)return tFalta('Escolha dinheiro ou PIX.');
