@@ -113,6 +113,37 @@ tr.eu td{background:#E6F2FA}
 .pchip.err{background:#F6F7F8;color:#8A99A6;text-decoration:line-through;text-decoration-color:rgba(198,40,40,.6)}
 .pchip .mk{display:inline-block;font-size:.8rem;margin-left:3px}.pchip.ok .mk{color:var(--ok)}.pchip.err .mk{color:var(--erro)}
 .pres{margin-top:5px;font-size:.78rem;color:var(--suave)}.pres b{font-weight:600;color:#8A99A6;text-transform:uppercase;letter-spacing:.05em;font-size:.7rem;margin-right:4px}
+.uj-fx{margin-top:4px;border-radius:10px 10px 0 0;padding:7px 12px;font:800 1rem var(--disp);letter-spacing:.06em;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.uj-fx.and{background:#E07B00}.uj-fx.fim{background:var(--ok)}
+.uj-fx small{font:600 .78rem var(--corpo);letter-spacing:0;text-align:right}
+.uj-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#fff;margin-right:6px;animation:ujp 1.4s infinite}
+@keyframes ujp{50%{opacity:.25}}@media (prefers-reduced-motion:reduce){.uj-dot{animation:none}}
+.uj-placar{background:#0B1A33;color:#fff;border-radius:0 0 12px 12px;padding:12px 16px;text-align:center}
+.uj-placar small{display:block;font:600 .8rem var(--disp);letter-spacing:.1em;text-transform:uppercase;color:#9FB3C8}
+.uj-placar .pl{font:800 2.3rem/1.1 var(--disp);margin:4px 0}.uj-placar .pl span{color:#6FB8E3;margin:0 8px}
+.uj-placar .g{font-size:.85rem;color:#C9D6E3}
+.uj-barra{display:flex;height:28px;border-radius:6px;overflow:hidden;font:700 .9rem/28px var(--disp);color:#fff;text-align:center}
+.uj-m{background:#5B6B79}.uj-e{background:#E0873A}.uj-v{background:var(--azul)}
+.uj-leg{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:6px;font-size:.82rem;color:var(--suave)}
+.uj-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.uj-tw{margin-top:12px;background:var(--branco);border:1px solid var(--linha);border-radius:10px;overflow-x:auto}
+table.uj-tab{width:100%;border-collapse:collapse;margin:0}
+table.uj-tab th{font:700 .7rem var(--disp);letter-spacing:.04em;text-transform:uppercase;color:#fff;background:#0B1A33;padding:7px 4px;text-align:left;white-space:nowrap}
+table.uj-tab th.n,table.uj-tab td.n{text-align:right}
+table.uj-tab td{padding:7px 4px;border-bottom:1px solid #EDF1F5;white-space:nowrap;font:700 .95rem var(--disp)}
+table.uj-tab tr.abre{cursor:pointer}
+table.uj-tab td.nome{font:600 .84rem/1.25 var(--corpo);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:normal;color:#fff}
+table.uj-tab tr.g-MANDANTE td.nome{background:#E9EEF2;color:var(--texto)}table.uj-tab tr.g-EMPATE td.nome{background:#E0873A}table.uj-tab tr.g-VISITANTE td.nome{background:var(--azul)}
+table.uj-tab .gj{display:block;font:600 .74rem var(--corpo);white-space:nowrap}
+table.uj-tab .gj.err{text-decoration:line-through;text-decoration-color:rgba(198,40,40,.8);opacity:.75}
+table.uj-tab tr.g-MANDANTE .gj.ok{color:#1B5E20}
+table.uj-tab td.ok{color:var(--ok)}table.uj-tab td.ok::after{content:" ✓";font-size:.7rem}
+table.uj-tab td.err{color:#9AA7B2;text-decoration:line-through;text-decoration-color:rgba(198,40,40,.6)}
+table.uj-tab td.vz{color:#C3CDD5}
+table.uj-tab td.pt{font:800 1.05rem var(--disp)}table.uj-tab td.pt small{display:block;font:600 .7rem var(--corpo);color:var(--suave)}
+.uj-ex{font:700 .62rem var(--disp);background:#FFF3C4;color:#7A5B00;border-radius:3px;padding:0 4px;vertical-align:1px}
+.uj-nota{font-size:.78rem;color:var(--suave);margin:6px 2px 0}
+.uj-zap{margin-top:12px;background:#25D366;color:#073B1F}
 .linha-hist{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #EDF1F5}
 .linha-hist:last-child{border-bottom:0}
 .premio{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--linha)}
@@ -374,14 +405,73 @@ function tabelaPalpites(lista,comPontos){
   (comPontos?'<p class="suave">Toque num nome para ver onde ganhou e perdeu pontos. Geral tem penalidade por erro; Divisão não.</p>':'');
 }
 function ultimo(){
-  var h='';
-  (PUB.emAndamento||[]).forEach(function(a){h+='<h2>'+nomeJogo(a.jogo)+'</h2><p class="suave">Palpites encerrados · '+dh(a.jogo.data)+'</p>'+tabelaPalpites(a.palpites,false)});
-  var u=PUB.ultimo;
-  if(u){h+='<h2>'+esc(u.jogo.mandante)+' '+u.jogo.gm+' x '+u.jogo.gv+' '+esc(u.jogo.visitante)+'</h2><p class="suave">'+dh(u.jogo.data,1)+(u.jogo.goleadores?' · Gols: '+esc(u.jogo.goleadores.split(';').map(function(x){return x.split(' - ').pop()}).join(', ')):' · Sem gols do Grêmio')+'</p>'+tabelaPalpites(u.palpites,true)}
+  var atual=(PUB.emAndamento||[])[0]||PUB.ultimo,h='';
+  if(atual)h+=jogoPainel(atual);
   if(PUB.resultados&&PUB.resultados.length){h+='<h3>Resultados da temporada</h3><div class="bloco">'+PUB.resultados.map(function(j){return '<div class="premio"><span>'+dh(j.data,1)+' · '+nomeJogo(j)+(j.bonus?' <span class="div-tag d-GERAL">Bônus</span>':'')+'</span><b>'+j.gm+' x '+j.gv+'</b></div>'}).join('')+'</div>'}
   $('#s-jogo').innerHTML=h||'<div class="bloco">Nenhum jogo encerrado ainda.</div>';
-  ligarDetalhes($('#s-jogo'));
+  var b=$('#uj-comp');if(b)b.onclick=function(){compartilharJogo(atual)};
+  document.querySelectorAll('#s-jogo tr.abre').forEach(function(tr){tr.onclick=function(){var d=tr.nextElementSibling;d.hidden=!d.hidden;tr.setAttribute('aria-expanded',!d.hidden)}});
 }
+var UJ_GR=[['MANDANTE','m'],['EMPATE','e'],['VISITANTE','v']];
+function ujNomeCurto(n){var p=String(n).replace(/-\d+\s*$/,'').trim().split(/\s+/);return p.length>2?p[0]+' '+p[p.length-1]:p.join(' ')}
+function ujOrdenados(a){var com=a.palpites.filter(function(p){return !p.semPalpite});
+  return com.sort(function(x,y){var gx=UJ_GR.findIndex(function(g){return g[0]===x.vence}),gy=UJ_GR.findIndex(function(g){return g[0]===y.vence});return gx-gy||((y.bra||0)-(x.bra||0))||x.nome.localeCompare(y.nome)})}
+function jogoPainel(a){var j=a.jogo,st=a.situacao,temPl=st!=='ANDAMENTO',com=ujOrdenados(a),sem=a.palpites.filter(function(p){return p.semPalpite});
+  var cab=(j.campeonato?esc(j.campeonato):'')+(j.fase?' · '+esc(j.fase):'')+' · '+dh(j.data,1)+(j.numero?' · jogo '+j.numero:'');
+  var gols=j.goleadores?j.goleadores.split(';').map(function(x){return x.trim().split(' - ').pop()}).filter(String).join(', '):'';
+  var fx=st==='FINAL'?'<div class="uj-fx fim"><span>✓ ATUALIZAÇÃO FINAL</span><small>Resultado oficial · classificação atualizada</small></div>':
+    st==='PARCIAL'?'<div class="uj-fx and"><span><i class="uj-dot"></i>JOGO EM ANDAMENTO · PARCIAL</span><small>Pontos provisórios</small></div>':
+    '<div class="uj-fx and"><span><i class="uj-dot"></i>JOGO EM ANDAMENTO</span><small>Palpites encerrados</small></div>';
+  var h=fx+'<div class="uj-placar"><small>'+cab+'</small>'+(temPl?'<div class="pl">'+esc(j.mandante)+' '+j.gm+'<span>x</span>'+j.gv+' '+esc(j.visitante)+'</div><div class="g">'+(st==='FINAL'?(gols?'Gols: '+esc(gols):'Sem gols do Grêmio'):'Placar parcial'+(gols?' · Gols: '+esc(gols):'')):'<div class="pl">'+esc(j.mandante)+'<span>x</span>'+esc(j.visitante)+'</div><div class="g">'+com.length+' palpites validados · aguardando o placar')+'</div></div>';
+  // como a turma apostou
+  var cnt={MANDANTE:0,EMPATE:0,VISITANTE:0},amb=0;com.forEach(function(p){cnt[p.vence]=(cnt[p.vence]||0)+1;if(String(p.ambos).toUpperCase()==='SIM')amb++});
+  var rot={MANDANTE:esc(j.mandante)+' vence',EMPATE:'Empate',VISITANTE:esc(j.visitante)+' vence'};
+  if(com.length)h+='<div class="bloco" style="margin-top:12px"><h3 style="margin-top:0">Como a turma apostou</h3><div class="uj-barra">'+UJ_GR.map(function(g){return cnt[g[0]]?'<div class="uj-'+g[1]+'" style="flex:'+cnt[g[0]]+'">'+cnt[g[0]]+'</div>':''}).join('')+'</div>'+
+    '<div class="uj-leg">'+UJ_GR.map(function(g){return '<span><i class="uj-'+g[1]+'"></i>'+rot[g[0]]+': <b>'+cnt[g[0]]+'</b></span>'}).join('')+'<span>Ambos SIM: <b>'+amb+' de '+com.length+'</b></span></div></div>';
+  // tabela
+  var curto={MANDANTE:esc(j.mandante),EMPATE:'EMP',VISITANTE:esc(j.visitante)};
+  var cel=function(t,ok){if(!t)return '<td class="vz">–</td>';return '<td class="'+(temPl?(ok?'ok':'err'):'')+'">'+t+'</td>'};
+  if(com.length){h+='<div class="uj-tw"><table class="uj-tab"><thead><tr><th>Nome</th><th>Vence</th><th>Ambos</th><th>Placar</th>'+(temPl?'<th class="n">Pts</th>':'')+'</tr></thead><tbody>'+
+    com.map(function(p){var ac=p.ac||{jog:[]},jog=p.jogadores?p.jogadores.split(';').map(function(x){return x.trim()}).filter(String):[];
+      var jh=jog.map(function(x,k){var ok=ac.jog[k];return '<span class="gj'+(temPl?(ok?' ok':' err'):'')+'">⚽ '+esc(x.split(' - ').pop())+(temPl?(ok?' ✓':' ✗'):'')+'</span>'}).join('');
+      return '<tr class="g-'+p.vence+(temPl?' abre" tabindex="0" aria-expanded="false':'')+'"><td class="nome">'+esc(ujNomeCurto(p.nome))+(ac.exato&&temPl?' <span class="uj-ex">EXATO</span>':'')+jh+'</td>'+cel(curto[p.vence],ac.vence)+cel(esc(String(p.ambos).toUpperCase()),ac.ambos)+cel(p.placar?esc(p.placar):'',ac.exato)+
+      (temPl?'<td class="n pt">'+pts(p.bra)+'<small>div. '+pts(p.copas)+'</small></td>':'')+'</tr>'+(temPl?'<tr hidden><td colspan="5" style="background:#F7FAFC">'+partesHtml(p.partes)+'</td></tr>':'')}).join('')+'</tbody></table></div>'+
+    '<p class="uj-nota">'+(st==='PARCIAL'?'<b style="color:#E07B00">Pontos parciais.</b> ':'')+(temPl?'Pts = classificação geral (com penalidade) · div. = divisão (sem penalidade) · verde = acertou · riscado = errou · toque na linha para ver o detalhe. ':'')+'Cor do nome = em quem apostou · ⚽ = jogador escolhido.'+(sem.length?' Sem palpite: '+sem.map(function(p){return esc(ujNomeCurto(p.nome))}).join(', ')+'.':'')+'</p>'+
+    '<button class="btn larg uj-zap" id="uj-comp" type="button">Compartilhar no grupo</button><div id="uj-prev"></div>'}
+  else h+='<div class="bloco" style="margin-top:12px">Ninguém palpitou neste jogo.</div>';
+  return h}
+/* imagem "Palpites validados / Parcial / Resultado oficial" para mandar no grupo */
+function imagemJogo(a){var j=a.jogo,st=a.situacao,temPl=st!=='ANDAMENTO',L=ujOrdenados(a),W=1080,lh=58,top=temPl?330:300,H=top+L.length*lh+130;
+  var cv=document.createElement('canvas');cv.width=W;cv.height=H;var x=cv.getContext('2d'),D='"Barlow Condensed","Arial Narrow",Arial',C='Barlow,Arial';
+  var curto=function(t){return String(t).length>5?String(t).slice(0,5):t};
+  x.fillStyle='#0B1A33';x.fillRect(0,0,W,H);x.textAlign='center';x.fillStyle='#fff';x.font='800 66px '+D;
+  x.fillText(st==='FINAL'?'RESULTADO OFICIAL':st==='PARCIAL'?'PARCIAL DO PALPITAÇO':'PALPITES VALIDADOS',W/2,105);
+  x.fillStyle=st==='FINAL'?'#2E7D32':'#E07B00';x.fillRect(W/2-160,122,320,6);
+  x.fillStyle='#9FB3C8';x.font='700 34px '+D;x.fillText([j.mandante+' x '+j.visitante,j.campeonato,dh(j.data,1),j.fase,j.numero?'JOGO '+j.numero:''].filter(Boolean).join('  |  ').toUpperCase(),W/2,175);
+  if(temPl){x.fillStyle='#fff';x.font='800 72px '+D;x.fillText(j.mandante+'  '+j.gm+' x '+j.gv+'  '+j.visitante,W/2,262)}
+  x.textAlign='left';x.fillStyle='#fff';x.fillRect(40,top-50,W-80,L.length*lh+60);
+  x.fillStyle='#0B1A33';x.font='700 26px '+D;var col=[60,450,560,665,770];['NOME','VENCE','AMBOS','PLACAR','GOLS'].forEach(function(t,i){x.fillText(t,col[i],top-14)});
+  if(temPl){x.textAlign='right';x.fillText('GERAL',W-150,top-14);x.fillText('DIV.',W-60,top-14);x.textAlign='left'}
+  var cor={MANDANTE:'#E9EEF2',EMPATE:'#E0873A',VISITANTE:'#0D80BF'},vt={MANDANTE:curto(j.mandante),EMPATE:'EMP',VISITANTE:curto(j.visitante)};
+  L.forEach(function(p,i){var y=top+i*lh,ac=p.ac||{jog:[]},c=function(ok){return temPl?(ok?'#2E7D32':'#9AA7B2'):'#1E2933'};
+    x.fillStyle=cor[p.vence]||'#E9EEF2';x.fillRect(40,y,395,lh-4);
+    x.fillStyle=p.vence==='MANDANTE'?'#1E2933':'#fff';x.font='600 29px '+C;var nm=String(p.nome).replace(/-\d+\s*$/,'');x.fillText(nm.length>24?nm.slice(0,23)+'…':nm,58,y+38);
+    x.font='700 30px '+D;x.fillStyle=c(ac.vence);x.fillText(vt[p.vence]||p.vence,col[1],y+38);x.fillStyle=c(ac.ambos);x.fillText(String(p.ambos).toUpperCase(),col[2],y+38);
+    if(p.placar){x.fillStyle=c(ac.exato);x.fillText(p.placar.replace(/\s/g,''),col[3],y+38)}
+    var jog=p.jogadores?p.jogadores.split(';').map(function(s){return s.trim().split(' - ').pop()}).filter(String):[];
+    if(jog.length){x.font='600 22px '+C;x.fillStyle=c(ac.jog[0]);var t=jog.join(', ');x.fillText(t.length>15?t.slice(0,14)+'…':t,col[4],y+38)}
+    if(temPl){x.textAlign='right';x.font='800 32px '+D;x.fillStyle='#0B1A33';x.fillText(pts(p.bra),W-150,y+38);x.fillStyle='#5B6B79';x.fillText(pts(p.copas),W-60,y+38);x.textAlign='left'}
+    x.fillStyle='#E3E9EF';x.fillRect(40,y+lh-4,W-80,2)});
+  x.fillStyle='#9FB3C8';x.font='600 26px '+C;x.textAlign='center';x.fillText('Consulado Gremista de Serra Alta · consuladosa.github.io',W/2,H-45);
+  return cv}
+function compartilharJogo(a){var b=$('#uj-comp'),cv=imagemJogo(a),nome='palpitaco-'+(a.jogo.numero||'jogo')+'.png';b.disabled=true;
+  var mostra=function(){$('#uj-prev').innerHTML='<div class="bloco" style="margin-top:10px;text-align:center"><img src="'+cv.toDataURL('image/png')+'" alt="Imagem para o grupo" style="width:100%;border-radius:8px"><p class="suave" style="margin:6px 0 0;font-size:.85rem">Toque e segure na imagem para salvar ou compartilhar.</p></div>'};
+  cv.toBlob(function(blob){b.disabled=false;
+    try{var f=new File([blob],nome,{type:'image/png'});
+      if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'Palpitaço'}).catch(function(e){if(e&&e.name!=='AbortError')mostra()});return}}catch(e){}
+    mostra()},'image/png')}
+/* enquanto houver jogo em andamento, atualiza a aba sozinha a cada minuto */
+setInterval(function(){if(document.hidden||!PUB||!(PUB.emAndamento||[]).length)return;run('apiPublico').then(function(p){PUB=p;$('#sub').textContent='Palpitaço '+p.ano+' · atualizado '+dh(p.atualizado);ultimo();classif()}).catch(function(){})},60000);
 
 /* ===== prêmios ===== */
 function premios(){
