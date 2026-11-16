@@ -145,6 +145,26 @@ tr.detalhe td{background:#F7FAFC;padding:6px 8px 10px}
 .carregando{color:var(--suave);padding:20px 0;text-align:center}
 .regras p,.regras li{max-width:68ch}
 .regras table td,.regras table th{padding:6px 8px}
+/* tesouraria */
+.t-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.t-kpi{background:var(--branco);border:1px solid var(--linha);border-top:4px solid var(--c,var(--azul));border-radius:10px;padding:8px 9px;min-width:0}
+.t-kpi small{display:block;font:700 .72rem var(--disp);letter-spacing:.08em;color:var(--suave);text-transform:uppercase}.t-kpi b{font:800 clamp(1rem,4.6vw,1.25rem) var(--disp);white-space:nowrap}
+.t-abas{display:flex;background:var(--branco);border:1px solid var(--linha);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.t-abas button{flex:1;border:0;background:none;padding:10px 4px;font:700 1rem var(--disp);color:var(--suave);cursor:pointer}.t-abas button[aria-pressed="true"]{background:var(--azul);color:var(--branco)}
+.pessoa{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--linha)}.pessoa:last-child{border-bottom:0}
+.pessoa .n{flex:1;min-width:0}.pessoa .n b{display:block}.pessoa .n span{font-size:.85rem;color:var(--suave)}
+.pessoa .v{font:800 1.15rem var(--disp);color:var(--erro);white-space:nowrap}
+.pessoa button{border:0;border-radius:8px;background:var(--ok);color:var(--branco);font:700 .95rem var(--disp);padding:9px 12px;cursor:pointer}
+.mov{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--linha)}.mov:last-child{border-bottom:0}
+.mov .n{flex:1;min-width:0}.mov .n span{display:block;font-size:.82rem;color:var(--suave)}.mov .v{font:800 1.1rem var(--disp);white-space:nowrap}
+.mov a{color:var(--azul)}
+.ttag{display:inline-block;font:700 .72rem var(--disp);letter-spacing:.04em;padding:1px 6px;border-radius:4px;background:#E3F2FD;color:var(--azul);margin-left:4px}
+.seg2{display:flex;gap:6px}.seg2 button{flex:1;border:1px solid var(--azul);background:var(--branco);color:var(--azul);border-radius:8px;padding:11px;font:700 1rem var(--disp);cursor:pointer}.seg2 button[aria-pressed="true"]{background:var(--azul);color:var(--branco)}
+#tes-pe{position:fixed;left:0;right:0;bottom:0;background:var(--branco);border-top:1px solid var(--linha);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;z-index:6}
+#tes-pe .btn{flex:1;padding:12px 8px}
+dialog#tdlg{border:0;border-radius:14px;padding:0;width:calc(100% - 24px);max-width:420px}dialog#tdlg::backdrop{background:rgba(0,0,0,.5)}
+#tdlg .cab{background:var(--preto);color:var(--branco);padding:12px 14px;font:800 1.15rem var(--disp);border-bottom:4px solid var(--azul)}#tdlg .corpo{padding:4px 14px 12px;max-height:70vh;overflow:auto}#tdlg .pe{display:flex;gap:8px;padding:0 14px 14px}#tdlg .pe .btn{flex:1}
+.link-tes{display:block;margin:18px auto 0;background:none;border:0;color:var(--suave);text-decoration:underline;font-size:.9rem;cursor:pointer}
 @media (prefers-reduced-motion:no-preference){.ativa{animation:surge .18s ease-out}@keyframes surge{from{opacity:.4}to{opacity:1}}}
 </style>
 </head>
@@ -168,6 +188,7 @@ tr.detalhe td{background:#F7FAFC;padding:6px 8px 10px}
     <p class="suave" style="margin:0">Android: menu ⋮ do navegador › <b>Adicionar à tela inicial</b>.<br>iPhone: botão Compartilhar › <b>Adicionar à Tela de Início</b>.</p>
   </div>
   <div id="ini-contato" class="suave" style="text-align:center"></div>
+  <button class="link-tes" data-area="tes" type="button">Acesso do tesoureiro</button>
 </section>
 
 <!-- PALPITAÇO: INÍCIO -->
@@ -201,6 +222,11 @@ tr.detalhe td{background:#F7FAFC;padding:6px 8px 10px}
   <div id="s-regras" class="regras" hidden><div id="regras"></div></div>
 </section>
 
+<!-- TESOURARIA (só para o tesoureiro cadastrado no admin) -->
+<section id="t-tes" class="tela" aria-label="Tesouraria">
+  <div id="tes"></div>
+</section>
+
 <!-- ANUIDADE -->
 <section id="t-anu" class="tela" aria-label="Área do sócio">
   <h2>Minha situação</h2>
@@ -210,6 +236,8 @@ tr.detalhe td{background:#F7FAFC;padding:6px 8px 10px}
 
 </main>
 
+<div id="tes-pe" hidden><button class="btn sec" id="tp-av" type="button">+ Receb. avulso</button><button class="btn" id="tp-enc" type="button">Encerrar caixinha</button></div>
+<dialog id="tdlg"><div class="cab" id="tdlg-t"></div><div class="corpo" id="tdlg-c"></div><div class="pe"><button class="btn sec" id="tdlg-x" type="button">Cancelar</button><button class="btn" id="tdlg-ok" type="button" style="background:var(--ok)">Confirmar</button></div></dialog>
 <nav class="abas" aria-label="Palpitaço" hidden>
   <button data-t="inicio" aria-current="true">Próximo jogo</button>
   <button data-t="palpitar" aria-current="false">Palpitar</button>
@@ -241,11 +269,12 @@ function erro(m){return '<div class="msg erro" role="alert">'+esc(m)+'</div>'}
 /* navegação */
 document.querySelectorAll('nav.abas button').forEach(function(b){b.onclick=function(){abrir(b.dataset.t)}});
 /* áreas: tela inicial, Área do sócio e Palpitaço (o site lembra a última) */
-var AREA_NOME={socio:'Área do sócio',palp:'Palpitaço'};
-function area(a){Mem.set('cs_area',a);var home=a==='home';
+var AREA_NOME={socio:'Área do sócio',palp:'Palpitaço',tes:'Tesouraria'};
+function area(a){Mem.set('cs_area',a);var home=a==='home';$('#tes-pe').hidden=true;
   $('#barra').hidden=home;$('#barra-t').textContent=AREA_NOME[a]||'';document.querySelector('nav.abas').hidden=a!=='palp';
   if(home){document.querySelectorAll('.tela').forEach(function(s){s.classList.toggle('ativa',s.id==='t-home')});window.scrollTo(0,0);return}
   if(a==='socio'){document.querySelectorAll('.tela').forEach(function(s){s.classList.toggle('ativa',s.id==='t-anu')});window.scrollTo(0,0);return}
+  if(a==='tes'){document.querySelectorAll('.tela').forEach(function(s){s.classList.toggle('ativa',s.id==='t-tes')});window.scrollTo(0,0);tesAbre();return}
   var t=Mem.get('cs_aba');abrir(t&&['inicio','palpitar','palp'].indexOf(t)>=0?t:'inicio')}
 document.querySelectorAll('[data-area]').forEach(function(b){b.onclick=function(){area(b.dataset.area)}});
 $('#b-volta').onclick=function(){area('home')};
@@ -472,10 +501,88 @@ function regras(){
   '<div class="bloco"><h3 style="margin-top:0">Premiação</h3><p>A premiação é calculada sobre o total de inscritos × '+rs(PUB.valorInscricao)+'. Até 10% desse valor forma um fundo de bônus, usado em jogos especiais para premiar o melhor palpite do jogo; se houver empate em todos os critérios, o bônus é dividido entre os empatados. O que sobrar do fundo soma na premiação final. Os valores são arredondados para múltiplos de R$ 10.</p><p>Quem é premiado no Geral e na divisão recebe os dois prêmios. Quem estiver devendo a inscrição tem o valor descontado do prêmio. Os valores atualizados estão em <b>Palpitaço › Prêmios</b>.</p></div>';
 }
 
+
+/* ===== TESOURARIA ===== */
+var TK_T=null,TP=null,TABA='rec',TBUSCA='';
+function tesAbre(){if(TP){tesTela();return}
+  var tk=Mem.get('cs_tk_t');
+  if(tk){$('#tes').innerHTML='<div class="carregando">Abrindo…</div>';run('tesPainel',tk).then(function(p){TK_T=tk;TP=p;tesTela()}).catch(function(){Mem.del('cs_tk_t');tesLogin()})}
+  else tesLogin()}
+function tesLogin(m){$('#tes-pe').hidden=true;
+  $('#tes').innerHTML='<h2>Tesouraria</h2><div class="bloco"><p class="suave" style="margin:0">Acesso liberado pela diretoria para receber pagamentos e lançar despesas nas reuniões.</p>'+(m?erro(m):'')+
+  '<label for="tl-cpf">CPF</label><input type="text" id="tl-cpf" inputmode="numeric" autocomplete="username" placeholder="000.000.000-00">'+
+  '<label for="tl-s">Senha</label><input type="password" id="tl-s" autocomplete="current-password">'+caixaManter('tl-m')+
+  '<p style="margin:14px 0 0"><button class="btn larg" id="tl-ok">Entrar</button></p><div id="tl-msg"></div></div>';
+  mascaraCpf($('#tl-cpf'));
+  $('#tl-ok').onclick=function(){var b=this;b.disabled=true;$('#tl-msg').innerHTML='';
+    run('loginTesouraria',$('#tl-cpf').value,$('#tl-s').value,$('#tl-m').checked).then(function(r){TK_T=r.token;TP=r.painel;if($('#tl-m').checked)Mem.set('cs_tk_t',r.token);tesTela()})
+    .catch(function(e){b.disabled=false;$('#tl-msg').innerHTML=erro(e)})}}
+function tesErro(e){if(String(e).indexOf('SESSAO_EXPIRADA')>=0){Mem.del('cs_tk_t');TK_T=null;TP=null;tesLogin('Sua sessão terminou. Entre de novo.');return}
+  tesMsg(e,'erro')}
+function tesMsg(t,tipo){var el=$('#t-msg');if(!el)return;el.innerHTML='<div class="msg '+(tipo||'ok')+'" role="status">'+esc(t)+'</div>';if(tipo!=='erro')setTimeout(function(){if(el.firstChild)el.innerHTML=''},4000)}
+function tesHora(iso){return iso?new Date(iso).toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo',hour:'2-digit',minute:'2-digit'}):''}
+function tesCall(fn,args,depois){return run.apply(null,[fn,TK_T].concat(args)).then(function(p){TP=p;tesTela();if(p.msg)tesMsg(p.msg);if(depois)depois()})}
+function tesTela(){var p=TP,c=p.caixinha;
+  var cab='<div class="bloco" style="padding:10px 14px"><b>'+(c?esc(c.descricao):'Tesouraria')+'</b><div class="suave">Tesoureiro: '+esc(p.tesoureiro)+' · <a href="#" id="t-sair">Sair</a></div></div><div id="t-msg"></div>';
+  if(!c){$('#tes-pe').hidden=true;
+    var u=p.ultima;
+    $('#tes').innerHTML=cab+'<div class="bloco"><h3 style="margin-top:0">Abrir a caixinha da reunião</h3><p class="suave" style="margin:0">Abra no começo da reunião. Tudo o que você receber e pagar fica nela, e o saldo entra no caixa do Consulado.</p>'+
+      '<label for="ta-d">Reunião</label><input type="text" id="ta-d" value="'+esc(p.sugestao)+'"><p style="margin:12px 0 0"><button class="btn larg" id="ta-ok">Abrir caixinha</button></p></div>'+
+      (u?'<div class="bloco"><h3 style="margin-top:0">Última caixinha</h3><b>'+esc(u.descricao)+'</b><p class="suave" style="margin:2px 0 6px">'+(u.status==='CONFERIDA'?'Conferida pela diretoria':'Aguardando conferência da diretoria')+'</p><div class="premio"><span>Recebido</span><b class="pos">'+rs(u.totais.recebido)+'</b></div><div class="premio"><span>Pago</span><b class="neg">'+rs(u.totais.pago)+'</b></div><div class="premio"><span>Saldo</span><b>'+rs(u.totais.saldo)+'</b></div><div class="premio"><span>Em dinheiro · PIX</span><span>'+rs(u.totais.dinheiro)+' · '+rs(u.totais.pix)+'</span></div></div>':'');
+    $('#ta-ok').onclick=function(){var b=this;b.disabled=true;tesCall('tesAbrir',[$('#ta-d').value]).catch(function(e){b.disabled=false;tesErro(e)})};
+    ligaSair();return}
+  var t=c.totais,q=TBUSCA.toLowerCase();
+  var lista=p.receber.filter(function(r){return !q||r.nome.toLowerCase().indexOf(q)>=0||r.desc.toLowerCase().indexOf(q)>=0});
+  var movHtml=function(m){return '<div class="mov"><div class="n"><b>'+esc(m.socio?m.socio+' · '+m.desc:m.desc)+'</b><span>'+tesHora(m.quando)+' · '+(m.forma==='BANCO'?'PIX':'Dinheiro')+(m.baixa?' · baixa feita':'')+(m.conciliado?'':' · <a href="#" data-u="'+esc(m.id)+'">desfazer</a>')+'</span></div><div class="v '+(m.valor<0?'neg':'pos')+'">'+rs(m.valor)+'</div></div>'};
+  var des=c.mov.filter(function(m){return m.valor<0});
+  $('#tes').innerHTML=cab+
+  '<div class="t-kpis"><div class="t-kpi" style="--c:var(--ok)"><small>Recebido</small><b>'+rs(t.recebido)+'</b></div><div class="t-kpi" style="--c:var(--erro)"><small>Pago</small><b>'+rs(t.pago)+'</b></div><div class="t-kpi"><small>Saldo</small><b>'+rs(t.saldo)+'</b></div></div>'+
+  '<div class="t-abas"><button data-ta="rec" aria-pressed="'+(TABA==='rec')+'">A receber</button><button data-ta="des" aria-pressed="'+(TABA==='des')+'">Despesas</button><button data-ta="mov" aria-pressed="'+(TABA==='mov')+'">Movimentos</button></div>'+
+  '<div class="bloco"'+(TABA==='rec'?'':' hidden')+'><input type="text" id="t-busca" placeholder="Buscar sócio" value="'+esc(TBUSCA)+'" style="margin-bottom:6px"><div id="t-lista">'+
+    (lista.length?lista.map(function(r,i){return '<div class="pessoa"><div class="n"><b>'+esc(r.nome)+'</b><span>'+esc(r.desc)+(r.palp?'<span class="ttag">PALPITAÇO</span>':'')+'</span></div><div class="v">'+rs(r.falta)+'</div><button type="button" data-r="'+p.receber.indexOf(r)+'">Recebeu</button></div>'}).join(''):'<p class="suave">Nada em aberto'+(q?' para essa busca':'')+'.</p>')+'</div></div>'+
+  '<div class="bloco"'+(TABA==='des'?'':' hidden')+'><p class="suave" style="margin-top:0">Lance aqui o que for pago na reunião: mercado, chopp, carne, gás…</p><button class="btn sec larg" id="t-desp" type="button">+ Lançar despesa</button><div style="margin-top:8px">'+(des.length?des.slice().reverse().map(movHtml).join(''):'<p class="suave">Nenhuma despesa ainda.</p>')+'</div></div>'+
+  '<div class="bloco"'+(TABA==='mov'?'':' hidden')+'>'+(c.mov.length?c.mov.slice().reverse().map(movHtml).join(''):'<p class="suave">Nada lançado ainda.</p>')+
+    '<p class="suave" style="margin:8px 0 0;font-size:.88rem">Em dinheiro: <b>'+rs(t.dinheiro)+'</b> · PIX: <b>'+rs(t.pix)+'</b></p></div><div style="height:70px"></div>';
+  $('#tes-pe').hidden=false;
+  document.querySelectorAll('[data-ta]').forEach(function(b){b.onclick=function(){TABA=b.dataset.ta;tesTela()}});
+  var bu=$('#t-busca');bu.oninput=function(){TBUSCA=bu.value;var pos=bu.selectionStart;tesTela();var n=$('#t-busca');n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}};
+  document.querySelectorAll('[data-r]').forEach(function(b){b.onclick=function(){tesReceberDlg(p.receber[+b.dataset.r])}});
+  document.querySelectorAll('[data-u]').forEach(function(a){a.onclick=function(e){e.preventDefault();var m=c.mov.filter(function(x){return x.id===a.dataset.u})[0];
+    tdlg('Desfazer lançamento','<p>'+esc(m.socio?m.socio+' · '+m.desc:m.desc)+' · <b>'+rs(m.valor)+'</b></p>'+(m.baixa?'<p class="suave">O valor volta a ficar em aberto na cobrança do sócio.</p>':''),'Desfazer',function(){return tesCall('tesDesfazer',[m.id])})}});
+  $('#t-desp').onclick=tesDespesaDlg;$('#tp-av').onclick=tesAvulsoDlg;$('#tp-enc').onclick=tesEncerrarDlg;
+  ligaSair()}
+function ligaSair(){$('#t-sair').onclick=function(e){e.preventDefault();if(TK_T)run('sairSessao',TK_T);Mem.del('cs_tk_t');TK_T=null;TP=null;tesLogin()}}
+/* janela de confirmação da tesouraria: fn devolve Promise, ou false para não fechar */
+function tdlg(t,html,okTxt,fn){var d=$('#tdlg');$('#tdlg-t').textContent=t;$('#tdlg-c').innerHTML='<div id="tdlg-m"></div>'+html;var ok=$('#tdlg-ok');ok.textContent=okTxt;ok.disabled=false;
+  d.querySelectorAll('.seg2 button').forEach(function(b){b.onclick=function(){b.parentNode.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b)})}});
+  $('#tdlg-x').onclick=function(){d.close()};
+  ok.onclick=function(){var r=fn();if(r===false)return;ok.disabled=true;Promise.resolve(r).then(function(){d.close()}).catch(function(e){ok.disabled=false;if(String(e).indexOf('SESSAO_EXPIRADA')>=0){d.close();tesErro(e)}else $('#tdlg-m').innerHTML=erro(e)})};
+  if(d.showModal)d.showModal();else d.setAttribute('open','')}
+function tFormaHtml(){return '<label>Forma</label><div class="seg2" id="tf"><button type="button" data-f="DINHEIRO" aria-pressed="false">Dinheiro</button><button type="button" data-f="PIX" aria-pressed="false">PIX</button></div>'}
+function tForma(){var b=document.querySelector('#tf button[aria-pressed="true"]');return b?b.dataset.f:''}
+function tFalta(m){$('#tdlg-m').innerHTML=erro(m);return false}
+function tValor(id){return parseFloat(String($(id).value).replace(',','.'))||0}
+function tesReceberDlg(r){var c=TP.caixinha;
+  tdlg('Recebeu de '+r.nome,'<p class="suave" style="margin:8px 0 0">'+esc(r.desc)+' · em aberto '+rs(r.falta)+'</p><label for="tr-v">Valor recebido</label><input type="number" id="tr-v" inputmode="decimal" step="0.01" value="'+r.falta.toFixed(2)+'">'+tFormaHtml()+'<p class="suave" style="font-size:.85rem;margin:8px 0 0">A baixa é feita na hora na cobrança do sócio.</p>','Confirmar',function(){
+    var v=tValor('#tr-v'),f=tForma();if(!v)return tFalta('Informe o valor.');if(!f)return tFalta('Escolha dinheiro ou PIX.');
+    return tesCall('tesReceber',[{caixinha:c.id,tipo:r.tipo,ref:r.ref,valor:v,forma:f}])})}
+function tesAvulsoDlg(){var c=TP.caixinha;
+  tdlg('Recebimento avulso','<label for="tv-d">De quem / do quê</label><input type="text" id="tv-d" placeholder="Ex.: visitante na janta, rifa"><label for="tv-v">Valor</label><input type="number" id="tv-v" inputmode="decimal" step="0.01">'+tFormaHtml(),'Confirmar',function(){
+    var v=tValor('#tv-v'),d=$('#tv-d').value.trim(),f=tForma();if(!d)return tFalta('Informe de quem ou do quê.');if(!v)return tFalta('Informe o valor.');if(!f)return tFalta('Escolha dinheiro ou PIX.');
+    return tesCall('tesReceber',[{caixinha:c.id,tipo:'AVULSO',desc:d,valor:v,forma:f}])})}
+function tesDespesaDlg(){var c=TP.caixinha;
+  tdlg('Lançar despesa','<label for="td-d">O que foi pago</label><input type="text" id="td-d" placeholder="Ex.: mercado, chopp, gás"><label for="td-v">Valor</label><input type="number" id="td-v" inputmode="decimal" step="0.01">'+tFormaHtml()+'<label for="td-f">Foto do comprovante (opcional)</label><input type="file" id="td-f" accept="image/*">','Confirmar',function(){
+    var v=tValor('#td-v'),d=$('#td-d').value.trim(),f=tForma(),arq=$('#td-f').files[0];if(!d)return tFalta('Informe o que foi pago.');if(!v)return tFalta('Informe o valor.');if(!f)return tFalta('Escolha dinheiro ou PIX.');
+    return (arq?tFoto(arq):Promise.resolve('')).then(function(foto){return tesCall('tesDespesa',[{caixinha:c.id,desc:d,valor:v,forma:f,foto:foto}])})})}
+/* reduz a foto para no máximo 1280 px em JPEG antes de enviar */
+function tFoto(arq){return new Promise(function(ok){var r=new FileReader();r.onload=function(){var img=new Image();img.onload=function(){var k=Math.min(1,1280/Math.max(img.width,img.height)),cv=document.createElement('canvas');cv.width=Math.round(img.width*k);cv.height=Math.round(img.height*k);cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);ok(cv.toDataURL('image/jpeg',.72))};img.onerror=function(){ok('')};img.src=r.result};r.onerror=function(){ok('')};r.readAsDataURL(arq)})}
+function tesEncerrarDlg(){var c=TP.caixinha,t=c.totais;
+  tdlg('Encerrar caixinha','<p style="margin:10px 0 4px">Recebido <b class="pos">'+rs(t.recebido)+'</b> · Pago <b class="neg">'+rs(t.pago)+'</b></p><p style="font:800 1.6rem var(--disp);margin:4px 0">Saldo '+rs(t.saldo)+'</p><p style="margin:0">Em dinheiro: <b>'+rs(t.dinheiro)+'</b> · PIX: <b>'+rs(t.pix)+'</b></p><p class="suave" style="font-size:.88rem">Entregue o dinheiro para a diretoria conferir. Depois de encerrar, não dá mais para lançar nesta caixinha.</p>','Encerrar',function(){
+    return tesCall('tesEncerrar',[c.id])})}
 /* volta para a aba em que a pessoa estava (F5) */
 (function(){var s=Mem.get('cs_sub'),d=Mem.get('cs_div'),ar=Mem.get('cs_area');
   if(d)DIV=d;if(s&&document.querySelector('#t-palp .chip[data-sub="'+s+'"]'))sub(s);
-  area(ar==='socio'||ar==='palp'?ar:'home');})();
+  area(ar==='socio'||ar==='palp'||ar==='tes'?ar:'home');})();
 telaAnuidade();
 (function(){var ta=Mem.get('cs_tk_a');if(ta){TK_A=ta;$('#anu').innerHTML='<div class="carregando">Abrindo…</div>';
   run('consultaAnuidade',ta).then(mostraAnuidade).catch(function(){Mem.del('cs_tk_a');TK_A=null;telaAnuidade()})}})();
