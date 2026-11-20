@@ -222,6 +222,7 @@ tr.detalhe td{background:#F7FAFC;padding:6px 8px 10px}
 #t-selbar .lp{background:none;color:var(--branco);text-decoration:underline;font-weight:600;padding:10px 4px}
 .divide{display:grid;grid-template-columns:1fr 1fr;gap:8px}.atalhos{display:flex;gap:6px;margin-top:8px}.atalhos button{flex:1;border:1px solid var(--linha);background:var(--fundo);border-radius:8px;padding:8px;font:700 .9rem var(--disp);cursor:pointer}
 .tot-dlg{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--linha);margin-top:8px;padding-top:8px}.tot-dlg b{font:800 1.5rem var(--disp)}
+.tcred{display:block;color:var(--ok);font:600 .8rem var(--corpo)}.usacred{display:flex;align-items:center;gap:8px;margin:10px 0 0;padding:9px 10px;border:2px solid var(--ok);border-radius:10px;font-weight:600}.usacred input{width:20px;height:20px;margin:0}.usacred b{margin-left:auto;color:var(--ok)}
 dialog#tdlg{border:0;border-radius:14px;padding:0;width:calc(100% - 24px);max-width:420px}dialog#tdlg::backdrop{background:rgba(0,0,0,.5)}
 #tdlg .cab{background:var(--preto);color:var(--branco);padding:12px 14px;font:800 1.15rem var(--disp);border-bottom:4px solid var(--azul)}#tdlg .corpo{padding:4px 14px 12px;max-height:70vh;overflow:auto}#tdlg .pe{display:flex;gap:8px;padding:0 14px 14px}#tdlg .pe .btn{flex:1}
 .link-tes{display:block;margin:18px auto 0;background:none;border:0;color:var(--suave);text-decoration:underline;font-size:.9rem;cursor:pointer}
@@ -594,7 +595,7 @@ function mostraAnuidade(r){
     if(x.saldo<0.01)return '<div class="it"><div><span class="v">'+rs(x.valor)+'</span> <span class="pg">· pago'+(x.data?' em '+x.data:'')+'</span></div>'+r2+'</div>';
     return '<div class="it"><div class="v">'+rs(x.valor)+'</div><div class="pg">pago '+rs(x.pago)+'</div><div class="falta">Falta '+rs(x.saldo)+'</div>'+r2+'</div>'};
   var h='<div class="bloco"><div style="font:800 1.4rem/1.1 var(--disp)">'+esc(r.nome)+'</div>'+
-  '<div class="msg '+(emDia?'ok':'erro')+'">'+(emDia?'Tudo em dia.':'Em aberto: <b>'+rs(r.aberto)+'</b>')+'</div>'+
+  '<div class="msg '+(emDia?'ok':'erro')+'">'+(emDia?'Tudo em dia.':'Em aberto: <b>'+rs(r.aberto)+'</b>')+'</div>'+(r.credito>0.009?'<div class="msg ok">Você tem <b>'+rs(r.credito)+'</b> de crédito com o Consulado. Ele pode abater o que estiver em aberto: fale com o tesoureiro.</div>':'')+
   '<div class="sit">'+
   '<div class="sit-cab"><span>Ano</span><span>Anuidade</span><span>Palpitaço e outros</span><span>Total</span></div>'+
   r.anos.map(function(a){
@@ -678,7 +679,7 @@ function tesTela(){var p=TP,c=p.caixinha;
     ligaSair();return}
   var t=c.totais,q=TBUSCA.toLowerCase();
   var lista=p.receber.filter(function(r){return !q||r.nome.toLowerCase().indexOf(q)>=0||r.desc.toLowerCase().indexOf(q)>=0});
-  var movHtml=function(m){return '<div class="mov"><div class="n"><b>'+esc(m.socio?m.socio+' · '+m.desc:m.desc)+'</b><span>'+tesHora(m.quando)+' · '+(m.forma==='BANCO'?'PIX':'Dinheiro')+(m.baixa?' · baixa feita':'')+(m.conciliado?'':' · <a href="#" data-u="'+esc(m.id)+'">desfazer</a>')+'</span></div><div class="v '+(m.valor<0?'neg':'pos')+'">'+rs(m.valor)+'</div></div>'};
+  var movHtml=function(m){return '<div class="mov"><div class="n"><b>'+esc(m.socio?m.socio+' · '+m.desc:m.desc)+'</b><span>'+tesHora(m.quando)+' · '+(m.forma==='BANCO'?'PIX':m.forma==='CREDITO'?'Crédito':'Dinheiro')+(m.baixa?' · baixa feita':'')+(m.conciliado?'':' · <a href="#" data-u="'+esc(m.id)+'">desfazer</a>')+'</span></div><div class="v '+(m.valor<0?'neg':'pos')+'">'+rs(m.valor)+'</div></div>'};
   var des=c.mov.filter(function(m){return m.valor<0});
   $('#tes').innerHTML=cab+
   '<div class="t-kpis"><div class="t-kpi" style="--c:var(--ok)"><small>Recebido</small><b>'+rs(t.recebido)+'</b></div><div class="t-kpi" style="--c:var(--erro)"><small>Pago</small><b>'+rs(t.pago)+'</b></div><div class="t-kpi"><small>Saldo</small><b>'+rs(t.saldo)+'</b></div></div>'+
@@ -686,7 +687,7 @@ function tesTela(){var p=TP,c=p.caixinha;
   '<div class="bloco"'+(TABA==='rec'?'':' hidden')+'><input type="text" id="t-busca" placeholder="Buscar sócio" value="'+esc(TBUSCA)+'" style="margin-bottom:6px"><div id="t-lista">'+tesListaHtml(lista,q)+'</div></div>'+
   '<div class="bloco"'+(TABA==='des'?'':' hidden')+'><p class="suave" style="margin-top:0">Lance aqui o que for pago na reunião: mercado, chopp, carne, gás…</p><button class="btn sec larg" id="t-desp" type="button">+ Lançar despesa</button><div style="margin-top:8px">'+(des.length?des.slice().reverse().map(movHtml).join(''):'<p class="suave">Nenhuma despesa ainda.</p>')+'</div></div>'+
   '<div class="bloco"'+(TABA==='mov'?'':' hidden')+'>'+(c.mov.length?c.mov.slice().reverse().map(movHtml).join(''):'<p class="suave">Nada lançado ainda.</p>')+
-    '<p class="suave" style="margin:8px 0 0;font-size:.88rem">Em dinheiro: <b>'+rs(t.dinheiro)+'</b> · PIX: <b>'+rs(t.pix)+'</b></p></div><div style="height:130px"></div>';
+    '<p class="suave" style="margin:8px 0 0;font-size:.88rem">Em dinheiro: <b>'+rs(t.dinheiro)+'</b> · PIX: <b>'+rs(t.pix)+'</b>'+(t.credito>0.009?' · Crédito usado: <b>'+rs(t.credito)+'</b>':'')+'</p></div><div style="height:130px"></div>';
   $('#tes-pe').hidden=false;
   document.querySelectorAll('[data-ta]').forEach(function(b){b.onclick=function(){TABA=b.dataset.ta;tesTela()}});
   var bu=$('#t-busca');bu.oninput=function(){TBUSCA=bu.value;var q=TBUSCA.toLowerCase();$('#t-lista').innerHTML=tesListaHtml(p.receber.filter(function(r){return !q||r.nome.toLowerCase().indexOf(q)>=0||r.desc.toLowerCase().indexOf(q)>=0}),q);tesLigaLista()};
@@ -712,7 +713,8 @@ function tesListaHtml(lista,q){if(!lista.length)return '<p class="suave">Nada em
   var g={},ord=[];lista.forEach(function(r){if(!g[r.nome]){g[r.nome]=[];ord.push(r.nome)}g[r.nome].push(r)});
   var tf=lista.reduce(function(t,r){return t+r.falta},0);
   return (q?'<div class="premio" style="margin-bottom:4px"><span>Total em aberto nesta busca</span><b>'+rs(tf)+'</b></div>':'')+ord.map(function(n,gi){var it=g[n],tot=it.reduce(function(t,r){return t+r.falta},0),todos=it.every(function(r){return SEL[chave(r)]});
-    return '<div class="grupo"><div class="grupo-cab"><b>'+esc(n)+'</b><span class="tot">'+rs(tot)+'</span><button type="button" data-g="'+gi+'">'+(todos?'Desmarcar':'Marcar tudo')+'</button></div>'+
+    var cr=(TP.creditos||{})[it[0].ck]||0;
+    return '<div class="grupo"><div class="grupo-cab"><b>'+esc(n)+(cr>0.009?'<small class="tcred">Crédito disponível: '+rs(cr)+'</small>':'')+'</b><span class="tot">'+rs(tot)+'</span><button type="button" data-g="'+gi+'">'+(todos?'Desmarcar':'Marcar tudo')+'</button></div>'+
     it.map(function(r){var k=chave(r);return '<label class="item'+(SEL[k]?' sel':'')+'"><input type="checkbox" data-k="'+esc(k)+'"'+(SEL[k]?' checked':'')+'><span class="d"><b>'+esc(r.desc)+'</b>'+(r.palp?'<span class="ttag">PALPITAÇO</span>':'')+'</span><span class="fv">'+rs(r.falta)+'</span></label>'}).join('')+'</div>'}).join('')}
 function tesSel(){var p=TP,itens=p&&p.caixinha?p.receber.filter(function(r){return SEL[chave(r)]}):[];
   Object.keys(SEL).forEach(function(k){if(!itens.some(function(r){return chave(r)===k}))delete SEL[k]});return itens}
@@ -727,20 +729,26 @@ function tesLigaLista(){var p=TP,q=TBUSCA.toLowerCase();
     it.forEach(function(r){if(todos)delete SEL[chave(r)];else SEL[chave(r)]=1});$('#t-lista').innerHTML=tesListaHtml(lista,q);tesLigaLista()}});
   $('#ts-limpa').onclick=function(){SEL={};tesTela()};$('#ts-ok').onclick=tesReceberDlg;tesBarra()}
 /* recebe os itens marcados: total, divisão entre dinheiro e PIX */
-function tesReceberDlg(){var c=TP.caixinha,it=tesSel();if(!it.length)return;var tot=Math.round(it.reduce(function(t,r){return t+r.falta},0)*100)/100;
+function tesReceberDlg(){var c=TP.caixinha,it=tesSel();if(!it.length)return;var bruto=Math.round(it.reduce(function(t,r){return t+r.falta},0)*100)/100,tot=bruto;
   var nomes=[];it.forEach(function(r){if(nomes.indexOf(r.nome)<0)nomes.push(r.nome)});
+  /* crédito que dá para usar: de cada sócio, até o total marcado dele */
+  var porCk={};it.forEach(function(r){porCk[r.ck]=(porCk[r.ck]||0)+r.falta});
+  var cred=Math.round(Object.keys(porCk).reduce(function(t,k){return t+Math.min(porCk[k],(TP.creditos||{})[k]||0)},0)*100)/100;
   tdlg('Receber de '+nomes.join(', '),'<div style="margin-top:8px">'+it.map(function(r){return '<div class="premio"><span>'+(nomes.length>1?esc(r.nome)+' · ':'')+esc(r.desc)+'</span><span>'+rs(r.falta)+'</span></div>'}).join('')+'</div>'+
-    '<div class="tot-dlg"><span>Total</span><b>'+rs(tot)+'</b></div>'+
+    (cred>0.009?'<label class="usacred"><input type="checkbox" id="tr-c"> Usar crédito do sócio <b>−'+rs(cred)+'</b></label>':'')+
+    '<div class="tot-dlg"><span id="tr-tl">Total</span><b id="tr-tt">'+rs(tot)+'</b></div>'+
     '<div class="divide"><div><label for="tr-d">Dinheiro</label><input type="number" id="tr-d" inputmode="decimal" step="0.01" placeholder="0,00"></div><div><label for="tr-p">PIX</label><input type="number" id="tr-p" inputmode="decimal" step="0.01" placeholder="0,00"></div></div>'+
     '<div class="atalhos"><button type="button" id="tr-td">Tudo em dinheiro</button><button type="button" id="tr-tp">Tudo em PIX</button></div>'+
     '<p class="suave" id="tr-res" style="font-size:.88rem;margin:8px 0 0">Para dividir, digite o valor de um: o outro completa sozinho.</p>','Confirmar',function(){
-    var d=tValor('#tr-d'),x=tValor('#tr-p');if(d<0||x<0||!(d+x>0))return tFalta('Informe quanto foi pago em dinheiro e/ou PIX.');
+    var d=tValor('#tr-d'),x=tValor('#tr-p'),uc=!!($('#tr-c')&&$('#tr-c').checked);if(d<0||x<0||(!(d+x>0)&&!(uc&&tot<0.009)))return tFalta('Informe quanto foi pago em dinheiro e/ou PIX.');
     if(d+x>tot+0.009)return tFalta('O valor passa do total. Dê o troco e informe só o que fica.');
-    return tesCall('tesReceberVarios',[{caixinha:c.id,itens:it.map(function(r){return {tipo:r.tipo,ref:r.ref}}),dinheiro:d,pix:x}]).then(function(){SEL={};tesTela();if(TP.msg)tesMsg(TP.msg)})});
+    return tesCall('tesReceberVarios',[{caixinha:c.id,itens:it.map(function(r){return {tipo:r.tipo,ref:r.ref}}),dinheiro:d,pix:x,usarCredito:uc}]).then(function(){SEL={};tesTela();if(TP.msg)tesMsg(TP.msg)})});
   var D=$('#tr-d'),P=$('#tr-p'),f2=function(v){return (Math.round(v*100)/100).toFixed(2)};
   var res=function(){var d=tValor('#tr-d'),x=tValor('#tr-p'),s=d+x,fal=tot-s;tQr(x,nomes.join(', '));$('#tr-res').innerHTML=s>0?'Recebendo <b>'+rs(s)+'</b>'+(fal>0.009?' · fica em aberto <b class="neg">'+rs(fal)+'</b>':fal<-0.009?' · <b class="neg">passa do total</b>':' · quita tudo'):'Para dividir, digite o valor de um: o outro completa sozinho.'};
   D.oninput=function(){var d=tValor('#tr-d');P.value=d<=tot?f2(tot-d):'';res()};P.oninput=function(){var x=tValor('#tr-p');D.value=x<=tot?f2(tot-x):'';res()};
-  $('#tr-td').onclick=function(){D.value=f2(tot);P.value='0.00';res()};$('#tr-tp').onclick=function(){P.value=f2(tot);D.value='0.00';res()}}
+  $('#tr-td').onclick=function(){D.value=f2(tot);P.value='0.00';res()};$('#tr-tp').onclick=function(){P.value=f2(tot);D.value='0.00';res()};
+  if($('#tr-c'))$('#tr-c').onchange=function(){tot=Math.round((bruto-(this.checked?cred:0))*100)/100;$('#tr-tl').textContent=this.checked?'A cobrar (já sem o crédito)':'Total';$('#tr-tt').textContent=rs(tot);
+    D.value='';P.value='';if(tot<0.009){D.value='0.00';P.value='0.00'}res();if(tot<0.009)$('#tr-res').innerHTML='O crédito quita tudo. Não há nada a cobrar.'}}
 function tesAvulsoDlg(){var c=TP.caixinha;
   tdlg('Recebimento avulso','<label for="tv-d">De quem / do quê</label><input type="text" id="tv-d" placeholder="Ex.: visitante na janta, rifa"><label for="tv-v">Valor</label><input type="number" id="tv-v" inputmode="decimal" step="0.01">'+tFormaHtml(),'Confirmar',function(){
     var v=tValor('#tv-v'),d=$('#tv-d').value.trim(),f=tForma();if(!d)return tFalta('Informe de quem ou do quê.');if(!v)return tFalta('Informe o valor.');if(!f)return tFalta('Escolha dinheiro ou PIX.');
