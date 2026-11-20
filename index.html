@@ -711,11 +711,11 @@ function chave(r){return r.tipo+'#'+r.ref}
 /* lista agrupada por sócio: total de cada um, marcar tudo, marcar item a item */
 function tesListaHtml(lista,q){if(!lista.length)return '<p class="suave">Nada em aberto'+(q?' para essa busca':'')+'.</p>';
   var g={},ord=[];lista.forEach(function(r){if(!g[r.nome]){g[r.nome]=[];ord.push(r.nome)}g[r.nome].push(r)});
-  var tf=lista.reduce(function(t,r){return t+r.falta},0);
+  var tf=lista.reduce(function(t,r){return t+(r.adiant?0:r.falta)},0);
   return (q?'<div class="premio" style="margin-bottom:4px"><span>Total em aberto nesta busca</span><b>'+rs(tf)+'</b></div>':'')+ord.map(function(n,gi){var it=g[n],tot=it.reduce(function(t,r){return t+r.falta},0),todos=it.every(function(r){return SEL[chave(r)]});
-    var cr=(TP.creditos||{})[it[0].ck]||0;
+    var cr=(TP.creditos||{})[it[0].ck]||0,base=it.filter(function(r){return !r.adiant});if(!base.length)base=it;tot=base.reduce(function(t,r){return t+r.falta},0);todos=base.every(function(r){return SEL[chave(r)]});
     return '<div class="grupo"><div class="grupo-cab"><b>'+esc(n)+(cr>0.009?'<small class="tcred">Crédito disponível: '+rs(cr)+'</small>':'')+'</b><span class="tot">'+rs(tot)+'</span><button type="button" data-g="'+gi+'">'+(todos?'Desmarcar':'Marcar tudo')+'</button></div>'+
-    it.map(function(r){var k=chave(r);return '<label class="item'+(SEL[k]?' sel':'')+'"><input type="checkbox" data-k="'+esc(k)+'"'+(SEL[k]?' checked':'')+'><span class="d"><b>'+esc(r.desc)+'</b>'+(r.palp?'<span class="ttag">PALPITAÇO</span>':'')+'</span><span class="fv">'+rs(r.falta)+'</span></label>'}).join('')+'</div>'}).join('')}
+    it.map(function(r){var k=chave(r);return '<label class="item'+(SEL[k]?' sel':'')+'"><input type="checkbox" data-k="'+esc(k)+'"'+(SEL[k]?' checked':'')+'><span class="d"><b>'+esc(r.desc)+'</b>'+(r.palp?'<span class="ttag">PALPITAÇO</span>':'')+(r.adiant?'<span class="ttag" style="background:#FFF3E0;color:#B26A00">ADIANTADO</span>':'')+'</span><span class="fv">'+rs(r.falta)+'</span></label>'}).join('')+'</div>'}).join('')}
 function tesSel(){var p=TP,itens=p&&p.caixinha?p.receber.filter(function(r){return SEL[chave(r)]}):[];
   Object.keys(SEL).forEach(function(k){if(!itens.some(function(r){return chave(r)===k}))delete SEL[k]});return itens}
 function tesBarra(){var it=tesSel(),bar=$('#t-selbar');bar.hidden=!it.length||TABA!=='rec';
@@ -725,7 +725,7 @@ function tesLigaLista(){var p=TP,q=TBUSCA.toLowerCase();
   var lista=p.receber.filter(function(r){return !q||r.nome.toLowerCase().indexOf(q)>=0||r.desc.toLowerCase().indexOf(q)>=0});
   var g={},ord=[];lista.forEach(function(r){if(!g[r.nome]){g[r.nome]=[];ord.push(r.nome)}g[r.nome].push(r)});
   document.querySelectorAll('#t-lista [data-k]').forEach(function(c){c.onchange=function(){if(c.checked)SEL[c.dataset.k]=1;else delete SEL[c.dataset.k];$('#t-lista').innerHTML=tesListaHtml(lista,q);tesLigaLista()}});
-  document.querySelectorAll('#t-lista [data-g]').forEach(function(b){b.onclick=function(){var it=g[ord[+b.dataset.g]],todos=it.every(function(r){return SEL[chave(r)]});
+  document.querySelectorAll('#t-lista [data-g]').forEach(function(b){b.onclick=function(){var it=g[ord[+b.dataset.g]],base=it.filter(function(r){return !r.adiant});if(base.length)it=base;var todos=it.every(function(r){return SEL[chave(r)]});
     it.forEach(function(r){if(todos)delete SEL[chave(r)];else SEL[chave(r)]=1});$('#t-lista').innerHTML=tesListaHtml(lista,q);tesLigaLista()}});
   $('#ts-limpa').onclick=function(){SEL={};tesTela()};$('#ts-ok').onclick=tesReceberDlg;tesBarra()}
 /* recebe os itens marcados: total, divisão entre dinheiro e PIX */
